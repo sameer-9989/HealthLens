@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, ArrowRight, Zap, Leaf, Smile, Moon, Sun, Sparkles, Palette, ListChecks, ShieldExclamation } from "lucide-react";
+import { Loader2, AlertTriangle, ArrowRight, Zap, Leaf, Smile, Moon, Sun, Sparkles, Palette, ListChecks, ShieldIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -191,7 +191,7 @@ export default function SelfCarePlansPage() {
               </AlertDescription>
             </Alert>
              <Alert variant="destructive">
-              <ShieldExclamation className="h-4 w-4" />
+              <ShieldIcon className="h-4 w-4" />
               <AlertTitle>Important Disclaimer</AlertTitle>
               <AlertDescription>
                 {generatedPlan.disclaimer}
