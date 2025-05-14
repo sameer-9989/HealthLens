@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, Activity, CalendarDays, PlusCircle, Trash2, BarChart3, Zap } from 'lucide-react';
+import { Loader2, AlertTriangle, Activity, CalendarDays, PlusCircle, Trash2, BarChart3, Zap, Lightbulb } from 'lucide-react';
 import { useForm, useFieldArray, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -150,7 +150,7 @@ export default function SymptomTimelinePage() {
                   </CardContent>
                 </Card>
               ))}
-               {errors.symptomEntries && !errors.symptomEntries.length && <p className="text-sm text-destructive mt-1">{errors.symptomEntries.message}</p>}
+               {errors.symptomEntries && !errors.symptomEntries.length && typeof errors.symptomEntries.message === 'string' && <p className="text-sm text-destructive mt-1">{errors.symptomEntries.message}</p>}
               <Button
                 type="button"
                 variant="outline"
@@ -229,3 +229,4 @@ export default function SymptomTimelinePage() {
     </div>
   );
 }
+
