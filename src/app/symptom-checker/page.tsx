@@ -72,6 +72,19 @@ export default function SymptomCheckerPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4 my-4 p-4 border bg-muted/20 rounded-lg">
+                <Image
+                    src="https://placehold.co/120x120.png"
+                    alt="Illustration of a person thoughtfully considering symptoms"
+                    width={100}
+                    height={100}
+                    className="rounded-md object-cover shadow-sm"
+                    data-ai-hint="symptom checking person"
+                />
+                <p className="text-sm text-muted-foreground text-center sm:text-left">
+                    Remember to be as detailed as possible with your symptoms. Include when they started, their intensity, and anything that makes them better or worse.
+                </p>
+            </div>
             <div>
               <Label htmlFor="symptoms" className="text-base">Your Symptoms</Label>
               <Textarea

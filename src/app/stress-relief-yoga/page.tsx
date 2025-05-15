@@ -72,6 +72,19 @@ export default function StressReliefYogaPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
+            <div className="my-4 p-4 border bg-muted/20 rounded-lg flex flex-col sm:flex-row items-center gap-4">
+                <Image
+                    src="https://placehold.co/120x120.png"
+                    alt="Illustration of a person doing a calming yoga pose"
+                    width={100}
+                    height={100}
+                    className="rounded-md object-cover shadow-sm"
+                    data-ai-hint="yoga calm person"
+                />
+                <p className="text-sm text-muted-foreground text-center sm:text-left">
+                    Feeling tense? Let us know what's bothering you – whether it's "shoulder pain from my desk job," "trouble sleeping due to anxiety," or just "general stress." We'll find some yoga or stretching routines to help you unwind.
+                </p>
+            </div>
             <div>
               <Label htmlFor="stressLevelOrSymptoms">How are you feeling? Describe your stress, symptoms, or goals:</Label>
               <Textarea

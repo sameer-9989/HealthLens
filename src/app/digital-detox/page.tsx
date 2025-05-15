@@ -58,6 +58,19 @@ export default function DigitalDetoxPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
+            <div className="my-4 p-4 border bg-muted/20 rounded-lg flex flex-col sm:flex-row items-center gap-4">
+                <Image
+                    src="https://placehold.co/120x120.png"
+                    alt="Illustration of a person mindfully disconnecting from devices"
+                    width={100}
+                    height={100}
+                    className="rounded-md object-cover shadow-sm"
+                    data-ai-hint="digital detox mindfulness"
+                />
+                <p className="text-sm text-muted-foreground text-center sm:text-left">
+                    Share your concerns about screen time or digital habits. Are you looking to reduce stress from notifications, improve sleep, or be more present in your daily life? Our AI can help you craft a plan.
+                </p>
+            </div>
             <div>
               <Label htmlFor="userConcern">What's your concern or goal regarding digital wellness?</Label>
               <Textarea

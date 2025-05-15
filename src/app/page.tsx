@@ -27,9 +27,19 @@ export default function DashboardPage() {
         <CardContent>
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="text-center md:text-left">
-              <p className="mb-4">
-                HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, create self-care plans, manage stress, and interact with a virtual health assistant.
-              </p>
+              <div className="mb-4 flex flex-col sm:flex-row items-center gap-4">
+                <Image
+                  src="https://placehold.co/150x150.png"
+                  alt="Illustration of a person interacting with health technology"
+                  width={150}
+                  height={150}
+                  className="rounded-lg shadow-sm object-cover hidden sm:block"
+                  data-ai-hint="health tech person"
+                />
+                <p>
+                  HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, create self-care plans, manage stress, and interact with a virtual health assistant.
+                </p>
+              </div>
               <p className="mb-6">
                 Navigate through the sidebar to access all available features.
               </p>

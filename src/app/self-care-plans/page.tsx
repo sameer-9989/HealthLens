@@ -45,7 +45,7 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     category: "Physical Activity",
     icon: Zap,
     imageHint: "office stretching",
-    youtubeVideoId: "tAUf7aVO0DM" // Corrected video ID example
+    youtubeVideoId: "tAUf7aVO0DM" 
   },
   {
     id: "digital-detox-evening",
@@ -105,6 +105,19 @@ export default function SelfCarePlansPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onGenerateSubmit)}>
           <CardContent className="space-y-4">
+             <div className="my-4 p-4 border bg-muted/20 rounded-lg flex flex-col sm:flex-row items-center gap-4">
+                <Image
+                    src="https://placehold.co/120x120.png"
+                    alt="Illustration of a person creating a plan"
+                    width={100}
+                    height={100}
+                    className="rounded-md object-cover shadow-sm"
+                    data-ai-hint="planning self-care"
+                />
+                <p className="text-sm text-muted-foreground text-center sm:text-left">
+                    Provide details like your main health focus (e.g., "manage stress", "get better sleep", "eat healthier for diabetes"), any current habits, and how long you'd like the plan to be. The more information you give, the better the AI can tailor a plan for you!
+                </p>
+            </div>
             <div>
               <Label htmlFor="userConditionOrGoal">What's your main condition or goal?</Label>
               <Input
