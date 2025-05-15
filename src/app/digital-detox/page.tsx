@@ -9,11 +9,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, Sparkles, PowerOff, BookOpen, Activity, LightbulbIcon, Image as ImageIconLucide } from "lucide-react";
+import { Loader2, AlertTriangle, Sparkles, PowerOff, BookOpen, Activity, LightbulbIcon } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Image from "next/image";
+// Image import removed
 
 const formSchema = z.object({
   userConcern: z.string().min(10, { message: "Please describe your concern or goal (min 10 characters)." }),
@@ -58,15 +58,7 @@ export default function DigitalDetoxPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
-            <div className="my-4 p-4 border bg-muted/20 rounded-lg flex flex-col sm:flex-row items-center gap-4">
-                <Image
-                    src="https://placehold.co/120x120.png"
-                    alt="Illustration of a person mindfully disconnecting from devices"
-                    width={100}
-                    height={100}
-                    className="rounded-md object-cover shadow-sm"
-                    data-ai-hint="digital detox mindfulness"
-                />
+            <div className="my-4 p-4 border bg-muted/20 rounded-lg">
                 <p className="text-sm text-muted-foreground text-center sm:text-left">
                     Share your concerns about screen time or digital habits. Are you looking to reduce stress from notifications, improve sleep, or be more present in your daily life? Our AI can help you craft a plan.
                 </p>
@@ -126,18 +118,8 @@ export default function DigitalDetoxPage() {
           <CardContent className="space-y-6">
             
             <div className="space-y-3">
-                <h3 className="font-semibold text-lg flex items-center"><ImageIconLucide className="h-5 w-5 mr-2 text-primary" /> Screen Time Insights</h3>
-                <div className="p-4 border rounded-md bg-muted/30">
-                    <p className="text-sm text-muted-foreground italic mb-2">Visualize the impact: Below is a conceptual image representing digital balance.</p>
-                     <Image 
-                        src="https://placehold.co/600x300.png" 
-                        alt="Digital wellness concept - balance between technology and nature" 
-                        width={600} 
-                        height={300} 
-                        className="rounded-md shadow-sm object-cover w-full"
-                        data-ai-hint="digital wellbeing nature balance" 
-                    />
-                </div>
+                <h3 className="font-semibold text-lg flex items-center"><PowerOff className="h-5 w-5 mr-2 text-primary" /> Screen Time Insights</h3>
+                {/* Placeholder image removed from here */}
                 {guidance.screenTimeRisksGuide.map((item, index) => (
                     <Card key={index} className="bg-background p-3 shadow-sm">
                         <CardTitle className="text-md font-medium">{item.title}</CardTitle>

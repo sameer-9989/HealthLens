@@ -4,16 +4,13 @@ import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
 import { ArrowRight, ListChecks, Activity, YoutubeIcon } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+// Image import removed as placeholder images are being removed
 
 export default function DashboardPage() {
-  // Filter out the dashboard itself and take a few features for quick access
   const featuredItems = mainNavItems.filter(item => item.href !== '/').slice(0, 5); 
-  // Specific items for "Your Health Journey" section
   const selfCarePlanItem = mainNavItems.find(item => item.href === '/self-care-plans');
   const symptomTimelineItem = mainNavItems.find(item => item.href === '/symptom-timeline');
   const stressReliefYogaItem = mainNavItems.find(item => item.href === '/stress-relief-yoga');
-
 
   return (
     <div className="space-y-8">
@@ -25,40 +22,19 @@ export default function DashboardPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="text-center md:text-left">
-              <div className="mb-4 flex flex-col sm:flex-row items-center gap-4">
-                <Image
-                  src="https://placehold.co/150x150.png"
-                  alt="Illustration of a person interacting with health technology"
-                  width={150}
-                  height={150}
-                  className="rounded-lg shadow-sm object-cover hidden sm:block"
-                  data-ai-hint="health tech person"
-                />
-                <p>
-                  HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, create self-care plans, manage stress, and interact with a virtual health assistant.
-                </p>
-              </div>
-              <p className="mb-6">
-                Navigate through the sidebar to access all available features.
-              </p>
+          <div className="text-center md:text-left">
+            <p className="mb-4">
+              HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, create self-care plans, manage stress, and interact with a virtual health assistant.
+            </p>
+            <p className="mb-6">
+              Navigate through the sidebar to access all available features.
+            </p>
+            <div className="flex justify-center md:justify-start">
               <Button asChild size="lg">
                 <Link href="/symptom-checker">
                   Check Symptoms <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-            </div>
-            <div className="mt-6 md:mt-0 flex justify-center items-center">
-              <Image
-                src="https://placehold.co/600x400.png"
-                alt="Abstract illustration representing digital health and wellness"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-md object-cover"
-                data-ai-hint="digital health wellbeing technology"
-                priority 
-              />
             </div>
           </div>
         </CardContent>

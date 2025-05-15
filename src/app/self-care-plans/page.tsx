@@ -9,9 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, ArrowRight, Leaf, Moon, Sparkles, Palette, ListChecks, ShieldIcon, YoutubeIcon, Zap, Image as ImageIconLucide } from "lucide-react"; // Added Zap, ImageIconLucide
+import { Loader2, AlertTriangle, ArrowRight, Leaf, Moon, Sparkles, Palette, ListChecks, ShieldIcon, YoutubeIcon, Zap } from "lucide-react"; 
 import Link from "next/link";
-import Image from "next/image";
+// Image import removed
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -23,7 +23,7 @@ interface StaticSelfCarePlan {
   description: string;
   category: string;
   icon: React.ElementType;
-  imageHint: string;
+  // imageHint: string; // Removed as placeholder images are being removed
   detailsLink?: string; 
   youtubeVideoId?: string; 
 }
@@ -35,7 +35,7 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     description: "Reduce stress and improve focus with a simple guided mindfulness exercise. Suitable for all levels.",
     category: "Mental Wellness",
     icon: Leaf,
-    imageHint: "meditation nature",
+    // imageHint: "meditation nature", // Removed
     youtubeVideoId: "inpok4MKVLM" 
   },
   {
@@ -44,7 +44,7 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     description: "Relieve tension from sitting with these easy stretches you can do at your desk.",
     category: "Physical Activity",
     icon: Zap,
-    imageHint: "office stretching",
+    // imageHint: "office stretching", // Removed
     youtubeVideoId: "tAUf7aVO0DM" 
   },
   {
@@ -53,7 +53,7 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     description: "Tips to disconnect from screens before bed for better sleep and a calmer mind.",
     category: "Lifestyle",
     icon: Moon,
-    imageHint: "calm bedroom no-phone",
+    // imageHint: "calm bedroom no-phone", // Removed
     detailsLink: "/digital-detox" 
   },
 ];
@@ -105,15 +105,7 @@ export default function SelfCarePlansPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onGenerateSubmit)}>
           <CardContent className="space-y-4">
-             <div className="my-4 p-4 border bg-muted/20 rounded-lg flex flex-col sm:flex-row items-center gap-4">
-                <Image
-                    src="https://placehold.co/120x120.png"
-                    alt="Illustration of a person creating a plan"
-                    width={100}
-                    height={100}
-                    className="rounded-md object-cover shadow-sm"
-                    data-ai-hint="planning self-care"
-                />
+             <div className="my-4 p-4 border bg-muted/20 rounded-lg">
                 <p className="text-sm text-muted-foreground text-center sm:text-left">
                     Provide details like your main health focus (e.g., "manage stress", "get better sleep", "eat healthier for diabetes"), any current habits, and how long you'd like the plan to be. The more information you give, the better the AI can tailor a plan for you!
                 </p>
@@ -200,19 +192,7 @@ export default function SelfCarePlansPage() {
                      {step.stepTitle} ({step.stepType})
                   </AccordionTrigger>
                   <AccordionContent className="space-y-2 pl-2 text-sm">
-                    {step.stepImageHint && (
-                        <div className="my-2 p-2 bg-muted/30 rounded-md border">
-                            <Image
-                                src={`https://placehold.co/300x180.png`}
-                                alt={`Visual hint for ${step.stepTitle}`}
-                                width={300}
-                                height={180}
-                                className="rounded object-cover border bg-background w-full shadow-sm mb-1"
-                                data-ai-hint={step.stepImageHint}
-                            />
-                            <p className="text-xs text-muted-foreground">Visual representation for: {step.stepImageHint}</p>
-                        </div>
-                    )}
+                    {/* Placeholder image for step removed */}
                     <p className="text-muted-foreground whitespace-pre-wrap">{step.stepDescription}</p>
                     {step.frequencyOrTiming && <p className="text-xs text-primary mt-1"><strong>Timing/Frequency:</strong> {step.frequencyOrTiming}</p>}
                     {(step.stepType === 'exercise' && (step.stepDescription.toLowerCase().includes('stretch') || step.stepDescription.toLowerCase().includes('yoga'))) && (
@@ -266,14 +246,7 @@ export default function SelfCarePlansPage() {
               <CardDescription className="text-sm text-muted-foreground">{plan.category}</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow space-y-3">
-               <Image 
-                src={`https://placehold.co/400x250.png`} 
-                alt={plan.title} 
-                width={400} 
-                height={250} 
-                className="rounded-md mb-2 object-cover w-full h-40"
-                data-ai-hint={plan.imageHint}
-              />
+               {/* Placeholder image for static plan removed */}
               <p className="text-muted-foreground text-sm">{plan.description}</p>
               {plan.youtubeVideoId && (
                 <div className="mt-2">

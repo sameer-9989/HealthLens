@@ -12,7 +12,7 @@ import { Loader2, AlertTriangle, Sparkles, YoutubeIcon, Zap, ListTree } from "lu
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Image from "next/image";
+// Image import removed
 
 const formSchema = z.object({
   stressLevelOrSymptoms: z.string().min(10, { message: "Please describe your stress or symptoms (min 10 characters)." }),
@@ -72,15 +72,7 @@ export default function StressReliefYogaPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
-            <div className="my-4 p-4 border bg-muted/20 rounded-lg flex flex-col sm:flex-row items-center gap-4">
-                <Image
-                    src="https://placehold.co/120x120.png"
-                    alt="Illustration of a person doing a calming yoga pose"
-                    width={100}
-                    height={100}
-                    className="rounded-md object-cover shadow-sm"
-                    data-ai-hint="yoga calm person"
-                />
+            <div className="my-4 p-4 border bg-muted/20 rounded-lg">
                 <p className="text-sm text-muted-foreground text-center sm:text-left">
                     Feeling tense? Let us know what's bothering you – whether it's "shoulder pain from my desk job," "trouble sleeping due to anxiety," or just "general stress." We'll find some yoga or stretching routines to help you unwind.
                 </p>
@@ -138,16 +130,7 @@ export default function StressReliefYogaPage() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {suggestions.map((routine, index) => (
                     <Card key={index} className="overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-200">
-                      <div className="relative aspect-video bg-muted">
-                         <Image 
-                            src={`https://placehold.co/320x180.png`} 
-                            alt={`Visual hint for ${routine.title}`}
-                            width={320} 
-                            height={180} 
-                            className="rounded-t-md object-cover w-full h-full"
-                            data-ai-hint={`${routine.category.toLowerCase().replace(/\s/g, '-')} ${routine.title.toLowerCase().split(" ").slice(0,2).join(" ")} yoga`}
-                        />
-                      </div>
+                      {/* Placeholder image removed */}
                       <CardContent className="p-4 flex-grow flex flex-col">
                         <h4 className="font-semibold text-md mb-1">{routine.title}</h4>
                         <p className="text-sm text-muted-foreground mb-3 flex-grow">{routine.description}</p>

@@ -9,13 +9,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, Lightbulb, CheckCircle2, Pill, Apple, Bike, LanguagesIcon, Globe, InfoIcon, Stethoscope, Image as ImageIconLucide } from 'lucide-react'; 
+import { Loader2, AlertTriangle, Lightbulb, CheckCircle2, Pill, Apple, Bike, LanguagesIcon, Globe, InfoIcon, Stethoscope } from 'lucide-react'; 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import Image from 'next/image';
-
+// Image import removed
 
 const formSchema = z.object({
   symptoms: z.string().min(10, { message: "Please describe your symptoms in at least 10 characters." }),
@@ -72,15 +71,7 @@ export default function SymptomCheckerPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
-            <div className="flex flex-col sm:flex-row items-center gap-4 my-4 p-4 border bg-muted/20 rounded-lg">
-                <Image
-                    src="https://placehold.co/120x120.png"
-                    alt="Illustration of a person thoughtfully considering symptoms"
-                    width={100}
-                    height={100}
-                    className="rounded-md object-cover shadow-sm"
-                    data-ai-hint="symptom checking person"
-                />
+            <div className="my-4 p-4 border bg-muted/20 rounded-lg">
                 <p className="text-sm text-muted-foreground text-center sm:text-left">
                     Remember to be as detailed as possible with your symptoms. Include when they started, their intensity, and anything that makes them better or worse.
                 </p>
@@ -173,19 +164,7 @@ export default function SymptomCheckerPage() {
                         {condition.conditionName || `Suggestion ${index + 1}`}
                       </AccordionTrigger>
                       <AccordionContent className="space-y-4 pt-3 pl-2 text-sm">
-                        <div className='my-3 p-3 bg-muted/30 rounded-md border'>
-                            <h4 className="font-semibold flex items-center mb-1 text-primary"><ImageIconLucide className="h-4 w-4 mr-1.5" /> Visual Context for {condition.conditionName}</h4>
-                            <Image 
-                                src={`https://placehold.co/400x200.png`}
-                                alt={`Illustrative image for ${condition.conditionName}`}
-                                width={400}
-                                height={200}
-                                className="rounded object-cover border bg-background w-full shadow-sm"
-                                data-ai-hint={`${condition.conditionName.toLowerCase()} illustration`}
-                            />
-                             <p className="text-xs text-muted-foreground mt-1">Placeholder image. In a full app, relevant medical illustrations would appear here.</p>
-                        </div>
-
+                        {/* Placeholder image for condition removed */}
                         <div>
                           <h4 className="font-semibold flex items-center mb-1"><Apple className="h-4 w-4 mr-1.5 text-green-600" /> Related Diet Suggestions:</h4>
                           <p className="text-muted-foreground whitespace-pre-wrap">{condition.relatedDietSuggestions}</p>
@@ -210,19 +189,8 @@ export default function SymptomCheckerPage() {
                                        <CardDescription className="text-xs">{med.purpose}</CardDescription>
                                   </CardHeader>
                                   <CardContent className="p-0 space-y-2">
-                                    <div className="flex items-start gap-3">
-                                      <Image 
-                                        src={`https://placehold.co/80x80.png`}
-                                        alt={`Placeholder for ${med.name}`}
-                                        width={60}
-                                        height={60}
-                                        className="rounded object-contain border bg-muted/20"
-                                        data-ai-hint={med.imageUrlHint}
-                                      />
-                                      <div className="flex-1">
-                                        <p className="text-xs text-muted-foreground whitespace-pre-wrap"><strong className="text-foreground">General Dosage:</strong> {med.generalDosage}</p>
-                                      </div>
-                                    </div>
+                                    {/* Placeholder image for medicine removed */}
+                                    <p className="text-xs text-muted-foreground whitespace-pre-wrap"><strong className="text-foreground">General Dosage:</strong> {med.generalDosage}</p>
                                     <Alert variant="destructive" className="mt-2 text-xs p-2 bg-destructive/5 border-destructive/20">
                                       <InfoIcon className="h-3 w-3 !text-destructive" />
                                       <AlertDescription className="!text-destructive/80">{med.disclaimer}</AlertDescription>
