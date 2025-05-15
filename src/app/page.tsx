@@ -41,12 +41,11 @@ export default function DashboardPage() {
             </div>
             <div className="hidden md:block">
               <Image 
-                src="https://placehold.co/600x400.png" 
-                alt="Healthcare technology illustration" 
+                src="/images/health-lens-dashboard-hero.png" 
+                alt="HealthLens platform guide to better health with assistant, symptom checker, and self-care plans" 
                 width={600} 
                 height={400} 
-                className="rounded-lg shadow-md"
-                data-ai-hint="health technology app" 
+                className="rounded-lg shadow-md object-cover"
               />
             </div>
           </div>
