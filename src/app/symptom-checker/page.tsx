@@ -2,18 +2,19 @@
 "use client";
 
 import React, { useState } from 'react';
-import { symptomChecker, SymptomCheckerInput, SymptomCheckerOutput } from '@/ai/flows/ai-symptom-checker';
+import { symptomChecker, SymptomCheckerInput, SymptomCheckerOutput, MedicineSuggestion } from '@/ai/flows/ai-symptom-checker';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, Lightbulb, CheckCircle2, Pill, Apple, Bike, LanguagesIcon, Globe } from 'lucide-react'; // Added Pill, Apple, Bike for new fields
+import { Loader2, AlertTriangle, Lightbulb, CheckCircle2, Pill, Apple, Bike, LanguagesIcon, Globe, InfoIcon, Stethoscope } from 'lucide-react'; 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import Image from 'next/image';
 
 
 const formSchema = z.object({
@@ -46,14 +47,24 @@ export default function SymptomCheckerPage() {
     setIsLoading(false);
   };
 
+  const getCategoryLabel = (category?: MedicineSuggestion['category']) => {
+    if (!category || category === 'Unknown') return null;
+    const labels: Record<typeof category, string> = {
+      OTC: "Over-the-Counter",
+      Prescription: "Prescription (Example)",
+      NaturalRemedy: "Natural Remedy"
+    };
+    return labels[category] || null;
+  }
+
   return (
     <div className="space-y-8 max-w-3xl mx-auto">
       <Card className="shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">AI Symptom Checker</CardTitle>
+          <CardTitle className="text-2xl font-bold flex items-center"><Stethoscope className="mr-2 h-7 w-7 text-primary"/>AI Symptom Checker</CardTitle>
           <CardDescription>
-            Describe your symptoms, and our AI will provide potential diagnostic suggestions and triage recommendations.
-            This tool is for informational purposes only and not a substitute for professional medical advice.
+            Describe your symptoms, and our AI will provide potential informational suggestions.
+            This tool is not a substitute for professional medical advice.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,7 +82,9 @@ export default function SymptomCheckerPage() {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="language" className="text-base">Language (Optional)</Label>
+                <Label htmlFor="language" className="text-base flex items-center">
+                  <LanguagesIcon className="mr-2 h-4 w-4 text-muted-foreground" /> Language (Optional)
+                </Label>
                 <Input
                   id="language"
                   placeholder="e.g., es, fr (default: en)"
@@ -81,7 +94,9 @@ export default function SymptomCheckerPage() {
                 {errors.language && <p className="text-sm text-destructive mt-1">{errors.language.message}</p>}
               </div>
               <div>
-                <Label htmlFor="culture" className="text-base">Cultural Context (Optional)</Label>
+                <Label htmlFor="culture" className="text-base flex items-center">
+                  <Globe className="mr-2 h-4 w-4 text-muted-foreground" /> Cultural Context (Optional)
+                </Label>
                 <Input
                   id="culture"
                   placeholder="e.g., Hispanic, South Asian"
@@ -105,10 +120,10 @@ export default function SymptomCheckerPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Checking Symptoms...
+                  Analyzing Symptoms...
                 </>
               ) : (
-                'Check Symptoms'
+                'Analyze Symptoms'
               )}
             </Button>
           </CardFooter>
@@ -131,17 +146,17 @@ export default function SymptomCheckerPage() {
           <CardContent className="space-y-6">
             {result.possibleConditions && result.possibleConditions.length > 0 && (
               <div>
-                <h3 className="text-lg font-medium flex items-center mb-2">
+                <h3 className="text-lg font-medium flex items-center mb-3">
                   <Lightbulb className="h-5 w-5 mr-2 text-primary" />
-                  Potential Conditions & Suggestions
+                  Potential Conditions & Informational Suggestions
                 </h3>
                 <Accordion type="single" collapsible className="w-full">
                   {result.possibleConditions.map((condition, index) => (
                     <AccordionItem value={`item-${index}`} key={index}>
-                      <AccordionTrigger className="text-base hover:no-underline">
+                      <AccordionTrigger className="text-base hover:no-underline font-semibold">
                         {condition.conditionName || `Suggestion ${index + 1}`}
                       </AccordionTrigger>
-                      <AccordionContent className="space-y-3 pl-2 text-sm">
+                      <AccordionContent className="space-y-4 pt-3 pl-2 text-sm">
                         <div>
                           <h4 className="font-semibold flex items-center mb-1"><Apple className="h-4 w-4 mr-1.5 text-green-600" /> Related Diet Suggestions:</h4>
                           <p className="text-muted-foreground whitespace-pre-wrap">{condition.relatedDietSuggestions}</p>
@@ -150,10 +165,45 @@ export default function SymptomCheckerPage() {
                           <h4 className="font-semibold flex items-center mb-1"><Bike className="h-4 w-4 mr-1.5 text-blue-600" /> Recommended Lifestyle Changes:</h4>
                           <p className="text-muted-foreground whitespace-pre-wrap">{condition.recommendedLifestyleChanges}</p>
                         </div>
-                        <div>
-                          <h4 className="font-semibold flex items-center mb-1"><Pill className="h-4 w-4 mr-1.5 text-red-600" /> Possible Medications:</h4>
-                          <p className="text-muted-foreground whitespace-pre-wrap">{condition.possibleMedications}</p>
-                        </div>
+                        {condition.suggestedMedicines && condition.suggestedMedicines.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold flex items-center mb-2"><Pill className="h-4 w-4 mr-1.5 text-red-600" /> Possible Medicine Information:</h4>
+                            <div className="space-y-3">
+                              {condition.suggestedMedicines.map((med, medIndex) => (
+                                <Card key={medIndex} className="p-3 bg-muted/20 border">
+                                  <CardHeader className="p-0 pb-2 mb-2">
+                                      <CardTitle className="text-md flex items-center justify-between">
+                                        {med.name}
+                                        {getCategoryLabel(med.category) && (
+                                          <span className="text-xs font-normal bg-primary/10 text-primary px-2 py-0.5 rounded-full">{getCategoryLabel(med.category)}</span>
+                                        )}
+                                      </CardTitle>
+                                       <CardDescription className="text-xs">{med.purpose}</CardDescription>
+                                  </CardHeader>
+                                  <CardContent className="p-0 space-y-2">
+                                    <div className="flex items-start gap-3">
+                                      <Image 
+                                        src={`https://placehold.co/80x80.png`}
+                                        alt={`Placeholder for ${med.name}`}
+                                        width={60}
+                                        height={60}
+                                        className="rounded object-contain border bg-background"
+                                        data-ai-hint={med.imageUrlHint}
+                                      />
+                                      <div className="flex-1">
+                                        <p className="text-xs text-muted-foreground whitespace-pre-wrap"><strong className="text-foreground">General Dosage:</strong> {med.generalDosage}</p>
+                                      </div>
+                                    </div>
+                                    <Alert variant="destructive" className="mt-2 text-xs p-2 bg-destructive/5 border-destructive/20">
+                                      <InfoIcon className="h-3 w-3 !text-destructive" />
+                                      <AlertDescription className="!text-destructive/80">{med.disclaimer}</AlertDescription>
+                                    </Alert>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </AccordionContent>
                     </AccordionItem>
                   ))}
@@ -186,3 +236,4 @@ export default function SymptomCheckerPage() {
     </div>
   );
 }
+

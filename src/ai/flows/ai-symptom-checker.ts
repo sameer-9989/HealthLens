@@ -18,11 +18,21 @@ const SymptomCheckerInputSchema = z.object({
 });
 export type SymptomCheckerInput = z.infer<typeof SymptomCheckerInputSchema>;
 
+const MedicineSuggestionSchema = z.object({
+  name: z.string().describe('Name of the medicine.'),
+  purpose: z.string().describe('Purpose of the medicine (e.g., pain relief, fever reducer, allergy treatment).'),
+  category: z.enum(['OTC', 'Prescription', 'NaturalRemedy', 'Unknown']).optional().describe('Category of the medicine (e.g., Over-the-Counter, Prescription, Natural Remedy, Unknown). Default to Unknown if not clear.'),
+  imageUrlHint: z.string().max(30).describe('A 1-3 word hint for an image of the medicine (e.g., "white round pill", "blue syrup bottle", "green capsule", "herbal tea bag"). This will be used for data-ai-hint for a placeholder image.'),
+  generalDosage: z.string().describe('General, non-personalized dosage guidance (e.g., "1-2 tablets every 4-6 hours as needed for adults"). MUST include a disclaimer that this is not personalized medical advice and to follow product labeling or doctor\'s instructions.'),
+  disclaimer: z.string().describe('Specific crucial disclaimer for this medicine, emphasizing to consult a healthcare professional before use and that this is not a prescription.')
+});
+export type MedicineSuggestion = z.infer<typeof MedicineSuggestionSchema>;
+
 const PossibleConditionSchema = z.object({
   conditionName: z.string().describe('The name of the possible condition.'),
   relatedDietSuggestions: z.string().describe('Dietary suggestions relevant to this condition.'),
   recommendedLifestyleChanges: z.string().describe('Lifestyle changes recommended for this condition.'),
-  possibleMedications: z.string().describe('Possible over-the-counter or prescription medicines, with a clear disclaimer to consult a doctor.'),
+  suggestedMedicines: z.array(MedicineSuggestionSchema).optional().describe('A list of 1-3 common, possible medicines relevant to this condition, each with detailed information. Only suggest medicines if generally appropriate and widely known for the possible condition.'),
 });
 
 const SymptomCheckerOutputSchema = z.object({
@@ -49,12 +59,21 @@ const prompt = ai.definePrompt({
 
   Instructions:
   1. Analyze the symptoms provided.
-  2. Identify several possible (but not definitive) conditions that might align with these symptoms.
+  2. Identify 2-3 possible (but not definitive) conditions that might align with these symptoms. Do not exceed 4 possible conditions.
   3. For each possible condition, provide:
      a. The Condition Name.
      b. Related Diet Suggestions (e.g., "For [Condition Name], consider incorporating more hydrating fluids and bland foods like bananas or rice if stomach upset is present.").
      c. Recommended Lifestyle Changes (e.g., "For [Condition Name], ensure adequate rest and avoid strenuous activities.").
-     d. Possible Medications (e.g., "Over-the-counter options like [example] might help with [symptom], or a doctor might prescribe [example]. ALWAYS consult a doctor before taking any medication.").
+     d. Suggested Medicines:
+        *   Provide 1-2 (max 3) *common* medicine suggestions that are *generally associated* with providing relief for symptoms of the possible condition.
+        *   For each medicine, specify:
+            *   'name': The common name of the medicine (e.g., Ibuprofen, Acetaminophen, Loratadine).
+            *   'purpose': Its primary purpose (e.g., "Pain relief and fever reduction", "Antihistamine for allergy relief").
+            *   'category': Classify as 'OTC' (Over-the-Counter), 'Prescription' (if typically prescribed, but state it's a general example), 'NaturalRemedy', or 'Unknown'.
+            *   'imageUrlHint': A very brief (1-3 words) description for a placeholder image (e.g., "white pills", "nasal spray", "herbal tea", "cough syrup bottle").
+            *   'generalDosage': General, non-personalized dosage information (e.g., "For adults, 1-2 tablets every 4-6 hours. Do not exceed X tablets in 24 hours. Always follow product label or doctor's advice."). Stress this is general.
+            *   'disclaimer': A strong disclaimer like "This is general information, not a prescription. Consult your doctor or pharmacist before taking any medication to ensure it's safe and appropriate for you, especially if you have other health conditions or take other medicines."
+        *   Only suggest medicines if it's common knowledge for the condition and appropriate for a general AI assistant to mention. Avoid highly specialized or controversial treatments.
   4. Provide general Triage Recommendations (e.g., "If symptoms worsen, or if you experience [severe symptom], seek medical attention immediately. For mild symptoms, monitor and consult a doctor if they persist.").
   5. Conclude with an 'overallDisclaimer' that this tool does not provide medical advice and a healthcare professional must be consulted for any health concerns.
   {{#if language}}
@@ -65,8 +84,8 @@ const prompt = ai.definePrompt({
   {{/if}}
 
   Strictly follow the output JSON schema.
-  Provide at least 2-3 possible conditions if applicable, but not more than 5.
-  Ensure medication advice clearly states "consult a doctor".
+  Ensure all disclaimers are prominent and clear.
+  Prioritize safety and responsible information sharing.
   `,
 });
 
@@ -81,13 +100,25 @@ const symptomCheckerFlow = ai.defineFlow(
     if (!output) {
       throw new Error("Symptom checker failed to produce an output.");
     }
-     // Ensure disclaimer is always present
+     // Ensure overall disclaimer is always present
     if (!output.overallDisclaimer || output.overallDisclaimer.trim() === "") {
       output.overallDisclaimer = "This information is not medical advice. Always consult with a qualified healthcare professional for any health concerns or before making any decisions related to your health or treatment.";
       if (input.language === "es") { // Basic example for Spanish
         output.overallDisclaimer = "Esta información no es un consejo médico. Consulte siempre con un profesional de la salud calificado para cualquier preocupación de salud o antes de tomar cualquier decisión relacionada con su salud o tratamiento.";
       }
     }
+    // Ensure individual medicine disclaimers are present
+    output.possibleConditions.forEach(condition => {
+      condition.suggestedMedicines?.forEach(med => {
+        if (!med.disclaimer || med.disclaimer.trim() === "") {
+          med.disclaimer = "Consult your doctor or pharmacist before taking any medication. This is not a prescription.";
+        }
+        if (med.generalDosage && !med.generalDosage.toLowerCase().includes("consult") && !med.generalDosage.toLowerCase().includes("doctor") && !med.generalDosage.toLowerCase().includes("pharmacist") && !med.generalDosage.toLowerCase().includes("label")) {
+            med.generalDosage += " Always follow product labeling or a doctor's advice for dosage.";
+        }
+      });
+    });
     return output;
   }
 );
+
