@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
-import { ArrowRight, ListChecks, Activity, YoutubeIcon, BookOpenCheck, Building } from "lucide-react"; 
+import { ArrowRight, ListChecks, Activity, YoutubeIcon, Building } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -18,12 +18,11 @@ export default function DashboardPage() {
       <Card className="shadow-xl overflow-hidden">
         <CardHeader className="pb-6 text-center bg-gradient-to-br from-primary/80 via-primary/70 to-accent/60 dark:from-primary/50 dark:via-primary/40 dark:to-accent/40 p-8 md:p-12">
           <Image
-            src="https://placehold.co/1200x400.png"
-            alt="Abstract representation of AI in healthcare technology"
-            width={1200}
-            height={400}
-            className="w-full h-auto object-cover rounded-lg mb-6 opacity-80"
-            data-ai-hint="AI health technology interface"
+            src="https://storage.googleapis.com/project-anvil-bucket/studio-assets%2Fhealth-lens-dashboard-hero.png_1715098829503"
+            alt="Health Lens App - Your guide to better health, featuring an AI assistant, symptom checker, self-care plans, and more, with a friendly doctor illustration."
+            width={480}
+            height={480}
+            className="w-full max-w-[480px] mx-auto h-auto object-contain rounded-lg mb-6"
             priority
           />
           <CardTitle className="text-3xl md:text-4xl font-bold text-primary-foreground drop-shadow-sm">
@@ -142,5 +141,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
