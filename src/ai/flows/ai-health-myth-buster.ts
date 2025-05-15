@@ -11,12 +11,12 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const BustHealthMythInputSchema = z.object({
+const BustHealthMythInputSchema = z.object({
   mythQuery: z.string().min(10).describe("The health myth or question the user wants to bust or get an answer for, e.g., 'Is garlic effective for colds?', 'Does cracking knuckles cause arthritis?'."),
 });
 export type BustHealthMythInput = z.infer<typeof BustHealthMythInputSchema>;
 
-export const BustHealthMythOutputSchema = z.object({
+const BustHealthMythOutputSchema = z.object({
   explanation: z.string().describe("The AI's detailed explanation, either debunking or confirming the myth with reasoning and evidence if possible. Should state if more research is needed."),
   youtubeSearchQuery: z.string().describe("A concise YouTube search query to find a video explainer related to the myth (e.g., 'garlic for colds myth video', 'cracking knuckles arthritis evidence')."),
   imageHint: z.string().max(30).describe("A 1-3 word hint for a relevant illustrative image (e.g., 'garlic cloves', 'hand xray', 'herbal tea immune'). This will be used for data-ai-hint for a placeholder image."),

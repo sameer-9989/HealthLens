@@ -11,13 +11,13 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const DetectHabitConflictsInputSchema = z.object({
+const DetectHabitConflictsInputSchema = z.object({
   habitsDescription: z.string().min(10).describe("A description of the user's current habits, routine, or specific habits they want to combine. E.g., 'I want to try intermittent fasting while also training for a marathon.', 'My daily routine includes intense morning workouts and only 2 meals a day.'"),
   healthConditions: z.string().optional().describe("Optional: Any known health conditions of the user, e.g., 'hypertension', 'diabetes type 2', 'recovering from injury'. This helps in providing more relevant conflict analysis."),
 });
 export type DetectHabitConflictsInput = z.infer<typeof DetectHabitConflictsInputSchema>;
 
-export const DetectHabitConflictsOutputSchema = z.object({
+const DetectHabitConflictsOutputSchema = z.object({
   conflictAnalysis: z.string().describe("The AI's detailed analysis of potential conflicts, risks, or contraindications based on the described habits and any health conditions. Explains why certain combinations might be harmful or suboptimal."),
   positiveSynergies: z.string().optional().describe("If applicable, any positive synergies or benefits of the described habit combinations, assuming they are generally safe."),
   recommendations: z.string().describe("Actionable recommendations for safer alternatives, modifications to the routine, or things to monitor. Should emphasize consulting a professional."),

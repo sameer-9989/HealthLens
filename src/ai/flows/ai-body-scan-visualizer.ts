@@ -11,13 +11,13 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const GetBodyPartInfoInputSchema = z.object({
+const GetBodyPartInfoInputSchema = z.object({
   bodyPart: z.string().min(3).describe("The specific body part the user is interested in, e.g., 'lower back', 'knee', 'shoulders', 'neck', 'feet'."),
   concern: z.string().optional().describe("Optional: Specific concern related to the body part, e.g., 'pain', 'stiffness', 'general care', 'strengthening'.")
 });
 export type GetBodyPartInfoInput = z.infer<typeof GetBodyPartInfoInputSchema>;
 
-export const GetBodyPartInfoOutputSchema = z.object({
+const GetBodyPartInfoOutputSchema = z.object({
   bodyPartName: z.string().describe("The validated or common name of the body part."),
   commonIssues: z.string().describe("A brief overview of common issues, discomforts, or conditions associated with this body part (e.g., 'Strains, sprains, disc issues for lower back')."),
   generalCareTips: z.string().describe("General tips for caring for this body part, including posture, movement, or preventative measures."),
