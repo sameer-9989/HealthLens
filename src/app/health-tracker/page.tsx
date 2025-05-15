@@ -12,11 +12,15 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { Loader2, AlertTriangle, CalendarDays, ActivityIcon, TrendingUp, NotebookText, Lightbulb, HelpCircle, ShieldAlert, Sparkles, Weight, Droplets, BedDouble, Zap, Smile, Flame, Utensils, Pill, Edit3, Download, Trash2 } from 'lucide-react';
 import { generateDailyWellnessTip, GenerateDailyWellnessTipInput, GenerateDailyWellnessTipOutput } from '@/ai/flows/daily-wellness-tip-generator';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod"; // Added import for Zod
 
 // Schemas for new trackable metrics (session state)
 interface LogEntry {
@@ -112,7 +116,7 @@ const moodLevels = [
 
 const energyLevels = Array.from({ length: 10 }, (_, i) => ({ value: i + 1, label: `${i + 1}` }));
 
-const criticalKeywords = ["chest pain", "difficulty breathing", "can't breathe", "severe bleeding", "loss of consciousness", "stroke symptoms", "sudden numbness", "severe dizziness", "suicidal", "want to die", "self harm", "heart attack", "unable to speak", "severe pain", "uncontrollable bleeding", "blue lips", "seizure", "extreme weakness", "vision loss"];
+const criticalKeywords = ["chest pain", "difficulty breathing", "can't breathe", "severe bleeding", "loss of consciousness", "stroke symptoms", "sudden numbness", "severe dizziness", "suicidal", "want to die", "self harm", "heart attack", "unable to speak", "severe pain", "uncontrollable bleeding", "blue lips", "seizure", "extreme weakness", "vision loss", "unbearable pain", "crushing chest pain", "shortness of breath at rest", "sudden confusion"];
 
 
 export default function HealthTrackerPage() {
@@ -371,6 +375,7 @@ export default function HealthTrackerPage() {
                 {isLoadingTip ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />} Get New Tip
               </Button>
             </form>
+             <p className="text-xs text-muted-foreground mt-2">AI personalization based on age/goals is available in the AI flow but not collected on this UI. Tips are based on Focus Area and Language selected.</p>
             {wellnessTipResult && <Alert className="mt-3 bg-primary/10 border-primary/30"><Sparkles className="h-4 w-4 text-primary" /><AlertTitle className="text-primary font-semibold">{wellnessTipResult.category}</AlertTitle><AlertDescription className="text-primary/90">{wellnessTipResult.wellnessTip}</AlertDescription></Alert>}
             {tipError && <Alert variant="destructive" className="mt-3"><AlertTriangle className="h-4 w-4" /><AlertTitle>Error</AlertTitle><AlertDescription>{tipError}</AlertDescription></Alert>}
           </AccordionContent>
@@ -548,8 +553,8 @@ export default function HealthTrackerPage() {
             <CardTitle className="text-lg flex items-center"><HelpCircle className="mr-2 h-5 w-5 text-primary"/>Important Notes & Future Enhancements</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
-            <p><strong>Data Persistence & History:</strong> All data tracked on this page (symptoms, weight, mood, etc.) is stored locally in your browser **for your current session only**. It will be cleared when you close this browser tab/window or refresh the page.</p>
-            <p><strong>Visualizations:</strong> Charts currently display data logged within this session. Viewing trends over weeks/months and comparing different metrics on a single graph are planned future enhancements requiring backend integration for persistent data storage.</p>
+            <p><strong>Data Persistence & History:</strong> All data tracked on this page (symptoms, weight, mood, etc.) is stored locally in your browser **for your current session only**. It will be cleared when you close this browser tab/window or refresh the page. Full historical data tracking and trend analysis over weeks/months require backend database integration.</p>
+            <p><strong>Visualizations:</strong> Charts currently display data logged within this session. Viewing trends over longer periods, comparing different metrics on a single graph, and more advanced chart types (like 3D or heatmaps) are planned future enhancements requiring backend integration and potentially different charting libraries.</p>
             <p><strong>AI Smart Insights & Goal Setting:</strong> AI-driven personalized insights and active goal setting/tracking features are planned for future updates and also depend on persistent data storage and more advanced AI analysis.</p>
             <p><strong>Offline Functionality & Cloud Sync:</strong> Full offline data storage (beyond the current session) and automatic cloud synchronization are advanced features that will be explored in future updates requiring backend services.</p>
             <p><strong>Emergency Guidance:</strong> The critical symptom warning is a client-side aid. Always prioritize professional medical advice for any urgent health concerns. The main AI Symptom Checker and Virtual Nursing Assistant also have AI-driven checks for critical inputs.</p>
@@ -558,3 +563,4 @@ export default function HealthTrackerPage() {
     </div>
   );
 }
+
