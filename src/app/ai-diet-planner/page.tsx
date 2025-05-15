@@ -11,11 +11,10 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Loader2, AlertTriangle, Sparkles, UtensilsCrossed, ShieldAlert, InfoIcon, Apple, Carrot, Fish, LeafIcon, WheatOff, MilkOff, Beef, Salad } from "lucide-react";
+import { Loader2, AlertTriangle, Sparkles, UtensilsCrossed, ShieldAlert, InfoIcon, Apple, Carrot, Fish, LeafIcon, WheatOff, MilkOff, Beef, Salad, LanguagesIcon, BookOpen } from "lucide-react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Image from "next/image";
 
 const activityLevels = [
   { value: 'sedentary', label: 'Sedentary (little or no exercise)' },
@@ -42,7 +41,17 @@ const genders = [
     {value: 'male', label: 'Male'},
     {value: 'female', label: 'Female'},
     {value: 'other', label: 'Other'},
-]
+];
+
+const languages = [
+    { value: "en", label: "English" },
+    { value: "es", label: "Español (Spanish)" },
+    { value: "hi", label: "हिन्दी (Hindi)" },
+    { value: "fr", label: "Français (French)" },
+    { value: "ar", label: "العربية (Arabic)" },
+    { value: "kn", label: "ಕನ್ನಡ (Kannada)" },
+];
+
 
 const formSchema = z.object({
   userName: z.string().optional(),
@@ -51,14 +60,15 @@ const formSchema = z.object({
   weightKg: z.coerce.number().positive({ message: "Weight must be a positive number." }),
   heightCm: z.coerce.number().int().positive({ message: "Height must be a positive number." }),
   activityLevel: z.enum(['sedentary', 'lightly_active', 'moderately_active', 'very_active', 'extra_active']),
-  healthGoals: z.string().min(3, {message: "Please list at least one health goal."}), // Will be split into array
-  medicalConditions: z.string().optional(), // Will be split into array
+  healthGoals: z.string().min(3, {message: "Please list at least one health goal."}), 
+  medicalConditions: z.string().optional(), 
   dietaryPreferences_dietType: z.enum(['none', 'vegetarian', 'vegan', 'keto', 'paleo', 'gluten_free', 'dairy_free', 'pescatarian', 'mediterranean', 'low_carb']).optional(),
-  dietaryPreferences_allergies: z.string().optional(), // Will be split into array
-  dietaryPreferences_foodDislikes: z.string().optional(), // Will be split into array
-  dietaryPreferences_preferredCuisines: z.string().optional(), // Will be split into array
+  dietaryPreferences_allergies: z.string().optional(), 
+  dietaryPreferences_foodDislikes: z.string().optional(), 
+  dietaryPreferences_preferredCuisines: z.string().optional(), 
   planDurationDays: z.coerce.number().int().min(1, {message: "Duration must be at least 1 day."}).max(7, {message: "Duration can be up to 7 days."}).default(1),
   calorieTarget: z.coerce.number().int().positive().optional(),
+  language: z.enum(['en', 'es', 'hi', 'fr', 'ar', 'kn']).optional().default('en'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -77,16 +87,25 @@ export default function AiDietPlannerPage() {
   const [generatedPlan, setGeneratedPlan] = useState<AIDietPlannerOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentLanguage, setCurrentLanguage] = useState<string>('en');
 
-  const { control, register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { control, register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
         gender: 'female',
         activityLevel: 'moderately_active',
         planDurationDays: 1,
         dietaryPreferences_dietType: 'none',
+        language: 'en',
     }
   });
+
+  const watchedLanguage = watch("language");
+  React.useEffect(() => {
+    if (watchedLanguage) {
+      setCurrentLanguage(watchedLanguage);
+    }
+  }, [watchedLanguage]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsLoading(true);
@@ -110,6 +129,7 @@ export default function AiDietPlannerPage() {
       },
       planDurationDays: data.planDurationDays,
       calorieTarget: data.calorieTarget,
+      language: data.language || 'en',
     };
 
     try {
@@ -134,17 +154,7 @@ export default function AiDietPlannerPage() {
           {meal.description && <CardDescription>{meal.description}</CardDescription>}
         </CardHeader>
         <CardContent className="text-sm space-y-3">
-          {meal.recipeImageHint && (
-            <div className="w-full h-40 relative rounded-md overflow-hidden mb-2 bg-muted">
-              <Image
-                src={`https://placehold.co/400x250.png`}
-                alt={meal.mealName || 'Meal image'}
-                layout="fill"
-                objectFit="cover"
-                data-ai-hint={meal.recipeImageHint}
-              />
-            </div>
-          )}
+          {/* Image rendering removed */}
           <div>
             <h4 className="font-semibold mb-1">Ingredients:</h4>
             <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
@@ -169,14 +179,28 @@ export default function AiDietPlannerPage() {
             </div>
           )}
           {meal.healthBenefits && <p className="text-xs text-green-700 dark:text-green-400 italic mt-1">Benefit: {meal.healthBenefits}</p>}
+          
+          {meal.detailedExplanation && (
+            <Accordion type="single" collapsible className="w-full mt-3">
+              <AccordionItem value="detailed-info">
+                <AccordionTrigger className="text-xs hover:no-underline text-primary flex items-center">
+                  <BookOpen className="h-3.5 w-3.5 mr-1.5" /> More Info & Tips
+                </AccordionTrigger>
+                <AccordionContent className="pt-2 text-xs text-muted-foreground whitespace-pre-wrap">
+                  {meal.detailedExplanation}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          )}
         </CardContent>
       </Card>
     );
   };
 
+  const pageDirection = currentLanguage === 'ar' ? 'rtl' : 'ltr';
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-8 max-w-4xl mx-auto" dir={pageDirection}>
       <Card className="shadow-xl">
         <CardHeader>
           <CardTitle className="text-2xl font-bold flex items-center">
@@ -189,7 +213,6 @@ export default function AiDietPlannerPage() {
         </CardHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-6">
-            {/* User Profile Section */}
             <Accordion type="multiple" defaultValue={['profile']} className="w-full">
               <AccordionItem value="profile">
                 <AccordionTrigger className="text-lg font-semibold">Your Profile</AccordionTrigger>
@@ -240,7 +263,6 @@ export default function AiDietPlannerPage() {
                 </AccordionContent>
               </AccordionItem>
 
-            {/* Health Goals & Conditions Section */}
              <AccordionItem value="goals">
                 <AccordionTrigger className="text-lg font-semibold">Health Goals & Conditions</AccordionTrigger>
                 <AccordionContent className="pt-4 space-y-4">
@@ -256,7 +278,6 @@ export default function AiDietPlannerPage() {
                 </AccordionContent>
             </AccordionItem>
 
-            {/* Dietary Preferences Section */}
             <AccordionItem value="diet">
                 <AccordionTrigger className="text-lg font-semibold">Dietary Preferences</AccordionTrigger>
                 <AccordionContent className="pt-4 space-y-4">
@@ -284,7 +305,6 @@ export default function AiDietPlannerPage() {
                 </AccordionContent>
             </AccordionItem>
 
-            {/* Plan Configuration Section */}
             <AccordionItem value="plan_config">
                 <AccordionTrigger className="text-lg font-semibold">Plan Configuration</AccordionTrigger>
                 <AccordionContent className="pt-4 space-y-4">
@@ -299,6 +319,16 @@ export default function AiDietPlannerPage() {
                             <Input id="calorieTarget" type="number" placeholder="e.g., 2000" {...register("calorieTarget")} className="mt-1" />
                             {errors.calorieTarget && <p className="text-sm text-destructive mt-1">{errors.calorieTarget.message}</p>}
                         </div>
+                    </div>
+                    <div>
+                        <Label htmlFor="language" className="flex items-center"><LanguagesIcon className="h-4 w-4 mr-2 text-muted-foreground"/>Language</Label>
+                        <Controller name="language" control={control} render={({ field }) => (
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <SelectTrigger id="language" className="mt-1"><SelectValue placeholder="Select language" /></SelectTrigger>
+                                <SelectContent>{languages.map(l => <SelectItem key={l.value} value={l.value}>{l.label}</SelectItem>)}</SelectContent>
+                            </Select>
+                        )} />
+                        {errors.language && <p className="text-sm text-destructive mt-1">{errors.language.message}</p>}
                     </div>
                 </AccordionContent>
             </AccordionItem>
@@ -337,7 +367,7 @@ export default function AiDietPlannerPage() {
             <CardDescription>{generatedPlan.introduction}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <Accordion type="multiple" className="w-full">
+            <Accordion type="multiple" className="w-full" defaultValue={["day-0"]}>
               {generatedPlan.dailyPlans.map((dailyPlan, dayIndex) => (
                 <AccordionItem value={`day-${dayIndex}`} key={dayIndex}>
                   <AccordionTrigger className="text-xl font-semibold hover:no-underline">Day {dailyPlan.dayNumber}</AccordionTrigger>
@@ -385,5 +415,3 @@ export default function AiDietPlannerPage() {
     </div>
   );
 }
-
-    
