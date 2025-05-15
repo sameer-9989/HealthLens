@@ -12,7 +12,7 @@ import { Loader2, AlertTriangle, Sparkles, YoutubeIcon, Zap, ListTree } from "lu
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-// Image import removed
+// Image import removed as no images are used in this file anymore
 
 const formSchema = z.object({
   stressLevelOrSymptoms: z.string().min(10, { message: "Please describe your stress or symptoms (min 10 characters)." }),

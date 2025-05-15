@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Loader2, AlertTriangle, ArrowRight, Leaf, Moon, Sparkles, Palette, ListChecks, ShieldIcon, YoutubeIcon, Zap } from "lucide-react"; 
 import Link from "next/link";
-// Image import removed
+// Image import removed as no images are used in this file anymore
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -23,7 +23,6 @@ interface StaticSelfCarePlan {
   description: string;
   category: string;
   icon: React.ElementType;
-  // imageHint: string; // Removed as placeholder images are being removed
   detailsLink?: string; 
   youtubeVideoId?: string; 
 }
@@ -35,7 +34,6 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     description: "Reduce stress and improve focus with a simple guided mindfulness exercise. Suitable for all levels.",
     category: "Mental Wellness",
     icon: Leaf,
-    // imageHint: "meditation nature", // Removed
     youtubeVideoId: "inpok4MKVLM" 
   },
   {
@@ -44,7 +42,6 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     description: "Relieve tension from sitting with these easy stretches you can do at your desk.",
     category: "Physical Activity",
     icon: Zap,
-    // imageHint: "office stretching", // Removed
     youtubeVideoId: "tAUf7aVO0DM" 
   },
   {
@@ -53,8 +50,7 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     description: "Tips to disconnect from screens before bed for better sleep and a calmer mind.",
     category: "Lifestyle",
     icon: Moon,
-    // imageHint: "calm bedroom no-phone", // Removed
-    detailsLink: "/digital-detox" 
+    detailsLink: "/digital-detox" // This page shows "feature removed", which is fine.
   },
 ];
 

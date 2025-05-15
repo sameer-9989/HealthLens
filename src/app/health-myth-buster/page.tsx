@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Loader2, AlertTriangle, Lightbulb, YoutubeIcon, Search, CheckCircle, XCircle, HelpCircleIcon } from "lucide-react";
-import Image from "next/image";
+// Image import removed as it's no longer used
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -124,18 +124,7 @@ export default function HealthMythBusterPage() {
              <Badge variant="outline" className={`text-xs ${getConfidenceColor(result.confidenceLevel)}`}>Confidence: {result.confidenceLevel}</Badge>
           </CardHeader>
           <CardContent className="space-y-4">
-            {result.imageHint && (
-                 <div className="my-4 rounded-lg overflow-hidden border shadow-sm aspect-video bg-muted flex items-center justify-center">
-                    <Image
-                        src={`https://placehold.co/600x350.png?text=${encodeURIComponent(result.imageHint.replace(/\s+/g, '+'))}`}
-                        alt={result.imageHint}
-                        width={600}
-                        height={350}
-                        className="object-cover w-full h-full"
-                        data-ai-hint={result.imageHint}
-                    />
-                </div>
-            )}
+            {/* Placeholder image removed here */}
             <div>
               <h3 className="font-semibold text-lg mb-1">Explanation:</h3>
               <p className="text-muted-foreground whitespace-pre-wrap">{result.explanation}</p>

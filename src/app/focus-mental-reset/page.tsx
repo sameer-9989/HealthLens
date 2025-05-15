@@ -5,14 +5,14 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Zap, Leaf, Wind, Moon, Waves, Sun } from "lucide-react"; // Added Waves, Sun
-import Image from "next/image";
+// Image import removed as it's no longer used
 
 interface ResetType {
   id: string;
   title: string;
   description: string;
   icon: React.ElementType;
-  imageHint: string;
+  imageHint: string; // Kept for potential future use with real images, but not used for placehold.co
   youtubeSearchQuery: string;
 }
 
@@ -37,7 +37,7 @@ const resetTypes: ResetType[] = [
     id: 'meditation',
     title: 'Short Meditation',
     description: 'A brief guided meditation to center yourself and find inner peace.',
-    icon: Moon, // Changed from Smile, Moon seems more fitting for meditation
+    icon: Moon, 
     imageHint: 'peaceful meditation silhouette',
     youtubeSearchQuery: '5 minute guided meditation for beginners',
   },
@@ -68,7 +68,7 @@ export default function FocusMentalResetPage() {
   }, []);
 
   if (!isClient) {
-    return null; // Or a loading spinner
+    return null; 
   }
 
   const handleSelectReset = (resetId: string) => {
@@ -113,18 +113,11 @@ export default function FocusMentalResetPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 space-y-4">
-                <div className="aspect-video bg-slate-800 rounded-lg overflow-hidden shadow-lg flex items-center justify-center">
-                  {/* Placeholder for actual video embed. For now, show image and link. */}
-                   <Image
-                        src={`https://placehold.co/1280x720.png?text=${encodeURIComponent(selectedReset.imageHint.replace(/\s+/g, '+'))}`}
-                        alt={selectedReset.title}
-                        width={1280}
-                        height={720}
-                        className="object-cover w-full h-full"
-                        data-ai-hint={selectedReset.imageHint}
-                        priority 
-                    />
-                </div>
+                {/* Placeholder for actual video embed or visual. Image removed. */}
+                {/* The div below used to contain the placeholder image. It's removed as it would be empty. */}
+                {/* <div className="aspect-video bg-slate-800 rounded-lg overflow-hidden shadow-lg flex items-center justify-center"> */}
+                {/* Image removed */}
+                {/* </div> */}
                 <p className="text-sm text-muted-foreground">{selectedReset.description}</p>
                 <Button variant="default" asChild className="w-full sm:w-auto">
                   <a

@@ -14,7 +14,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-// Image import removed
+// Image import removed as no images are used in this file anymore
 
 const formSchema = z.object({
   symptoms: z.string().min(10, { message: "Please describe your symptoms in at least 10 characters." }),
