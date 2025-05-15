@@ -17,16 +17,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="w-full max-w-[600px] mx-auto p-4">
-        <Image
-          src="/images/health_lens_hero.png"
-          alt="Health Lens App Hero Image"
-          width={600} 
-          height={600} 
-          className="rounded-lg shadow-md object-contain w-full h-auto"
-          priority 
-        />
-      </div>
+      {/* Hero image section removed */}
 
       <Card className="shadow-lg">
         <CardHeader className="pb-4 text-center">
@@ -36,7 +27,7 @@ export default function DashboardPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-1 gap-6 items-center"> {/* Adjusted to single column as image is now above */}
+          <div className="grid md:grid-cols-1 gap-6 items-center"> {/* Adjusted to single column */}
             <div className="text-center md:text-left">
               <p className="mb-4">
                 HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, create self-care plans, manage stress, and interact with a virtual health assistant.
@@ -50,7 +41,6 @@ export default function DashboardPage() {
                 </Link>
               </Button>
             </div>
-            {/* Previous image div removed */}
           </div>
         </CardContent>
       </Card>
