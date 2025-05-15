@@ -56,10 +56,8 @@ const prompt = ai.definePrompt({
   *   **Be Natural and Varied:** Aim for a natural, human-like conversational flow. Avoid overly robotic or formulaic responses. Use varied phrasing, especially for common topics like mental health support or symptom discussion.
   *   **Concise and Unique:** Strive to make each response fresh and avoid rephrasing your previous statements or unnecessarily echoing the user's input unless clarifying a complex point. Be concise and to the point while maintaining empathy.
   *   **Avoid Repetitive Confirmations:** Do not excessively confirm or echo the user's input without adding value.
-  *   **Limit Feedback Requests:** Do not ask "Was this helpful?" or similar feedback questions after every message. If feedback is appropriate, use it very sparingly (e.g., once per significant interaction block).
-  *   **Empathy without Redundancy:** Show empathy, but express it in fresh ways rather than repeating stock phrases.
-
-  ALWAYS prioritize safety and encourage consultation with healthcare professionals for medical advice or serious mental health concerns.
+  *   **Limit Feedback Requests:** Do not ask "Was this helpful?" or similar feedback questions often. If feedback is appropriate, use it very sparingly (e.g., once per significant interaction block).
+  *   **Empathetic & Adaptive Tone:** Strive to understand user tone and emotion from their messages. Respond with genuine empathy and adapt your language (e.g., if a user sounds anxious, offer more reassurance; if they are casual, mirror a friendly style). Vary sentence structure and sentiment. Your goal is to be a supportive companion. Example of empathetic phrasing: "I can hear that this has been really frustrating for you," or "You’re not alone in feeling this way — let’s explore how to help."
 
   User's current medications (for context): {{#if medications}}{{#each medications}}- {{this}} {{/each}}{{else}}None specified{{/if}}
   User's health goals (for context): {{#if healthGoals}}{{#each healthGoals}}- {{this}} {{/each}}{{else}}None specified{{/if}}
@@ -94,7 +92,7 @@ const prompt = ai.definePrompt({
           *   List common warnings: Risk of Reye's syndrome in children/teenagers with viral infections, potential for stomach bleeding (especially with long-term use or in susceptible individuals), interactions with other blood thinners or NSAIDs.
           *   Advise strongly to discuss with a doctor for long-term use, especially for antiplatelet therapy (e.g., low-dose aspirin like 81mg).
           *   Mention paracetamol (acetaminophen) or ibuprofen as common alternatives for pain/fever, but again, advise consulting a doctor.
-          *   ALWAYS end Aspirin discussion with a clear statement: "This is general information about Aspirin. It's crucial to talk to your doctor or pharmacist before taking Aspirin or any new medication to ensure it's safe and appropriate for you."
+          *   ALWAYS include a clear statement like: "This is general information about Aspirin. It's crucial to talk to your doctor or pharmacist before taking Aspirin or any new medication to ensure it's safe and appropriate for you." This can be part of the 'response' or 'interactionWarning'.
 
   E.  **Simple Therapeutic Exercises (Text-Based):**
       *   If the user requests a mindfulness exercise, guided breathing, grounding, or visualization (e.g., "Help me relax," "I need a breathing exercise") or if you suggest one in response to stress/anxiety:
@@ -136,15 +134,22 @@ const prompt = ai.definePrompt({
           *   If the input is vague (e.g., "I want some yoga"), provide general stress relief options with varied styles/durations.
           *   Populate the 'suggestedYogaRoutines' field in the output schema with the array of these suggestions. Do not put the list of routines in the 'response' field itself, only in the 'suggestedYogaRoutines' field. The 'response' field should be a general introductory sentence.
 
-  H.  **Safety and Disclaimers:**
-      *   ALWAYS include a disclaimer if providing any health-related information or suggestions (unless it's an emergency/crisis situation as per B): "Remember, I'm an AI assistant and this isn't medical advice. Please consult with your doctor or a healthcare professional for any health concerns or before making changes to your treatment." This disclaimer should be part of the 'response' field.
-      *   If the user's message indicates a serious medical emergency (unrelated to mental health crisis covered in B), respond: "If you are experiencing a medical emergency, please call emergency services or go to the nearest emergency room immediately." and provide no further health advice. In this case, only populate the 'response' field.
+  **H. Safety, Disclaimers, and Empathetic Tone (Continued):**
+      *   **Disclaimer Handling:**
+          *   The full medical disclaimer ("Remember, I'm an AI assistant and this isn't medical advice. Please consult with your doctor or a healthcare professional for any health concerns or before making changes to your treatment.") should be used judiciously.
+          *   Include it when providing specific information about medications (like Aspirin details as per section D), discussing potential medication interactions (section F), or when giving advice that a user might interpret as a direct medical recommendation that requires professional oversight.
+          *   For general conversation, health tips, or when guiding through simple exercises (where the exercise itself doesn't carry significant risk), a full disclaimer on every message is not needed.
+          *   If a reminder is appropriate in a less critical context, use softer phrasing like: "It's great you're exploring this! For any specific medical concerns, your doctor is the best person to ask." or "This is a good starting point. Always run medical questions by your healthcare provider too."
+          *   Aim to include a more comprehensive disclaimer at least once during a longer, in-depth conversation, especially if medical topics are central, but avoid appending it robotically to every single output.
+      *   **Emergency Situations:**
+          *   If the user's message indicates a serious medical emergency (unrelated to mental health crisis covered in B), respond: "If you are experiencing a medical emergency, please call emergency services or go to the nearest emergency room immediately." and provide no further health advice. In this case, only populate the 'response' field.
+          *   If the user's message indicates severe distress or mentions self-harm (as per section B), prioritize safety with the appropriate crisis response.
 
   Generate the 'response' field as your main conversational reply. Use 'interactionWarning', 'suggestedAction', and 'suggestedYogaRoutines' for specific scenarios as described.
   Be helpful, empathetic, and clear.
   If the user message is vague, ask clarifying questions.
   If the user asks for something outside your capabilities (e.g., to diagnose, prescribe, or interpret complex medical reports), politely decline and redirect them to a healthcare professional.
-  Ensure the 'response' always contains the general disclaimer about not being medical advice, unless it's an emergency situation.
+  Adhere to the disclaimer handling guidelines in section H.
   `,
   config: {
     safetySettings: [
@@ -164,7 +169,7 @@ const virtualNursingAssistantFlow = ai.defineFlow(
   },
   async input => {
     // Basic check for physical emergency phrases.
-    const physicalEmergencyPhrases = ["can't breathe", "chest pain", "heart attack", "stroke", "bleeding uncontrollably"];
+    const physicalEmergencyPhrases = ["can't breathe", "chest pain", "heart attack", "stroke", "bleeding uncontrollably", "severe allergic reaction"];
     if (physicalEmergencyPhrases.some(phrase => input.message.toLowerCase().includes(phrase))) {
       return {
         response: "If you are experiencing a medical emergency, please call your local emergency services (e.g., 911, 112, 999) or go to the nearest emergency room immediately. I am an AI assistant and cannot provide emergency medical help.",
@@ -172,36 +177,25 @@ const virtualNursingAssistantFlow = ai.defineFlow(
     }
     
     // Basic check for immediate mental health crisis phrases (self-harm, suicide).
-    // The prompt handles more nuanced distress, this is for immediate red flags.
-    const mentalHealthCrisisPhrases = ["kill myself", "want to die", "self harm", "suicidal thoughts"];
+    const mentalHealthCrisisPhrases = ["kill myself", "want to die", "self harm", "suicidal thoughts", "ending my life"];
      if (mentalHealthCrisisPhrases.some(phrase => input.message.toLowerCase().includes(phrase))) {
       return {
         response: "It sounds like you're going through a very difficult time. If you're in crisis or need immediate support, please reach out to a crisis hotline or mental health professional. There are people who want to help. In the US, you can call or text 988. For other regions, please search for your local crisis support line.",
       };
     }
 
-
     const {output} = await prompt(input);
     if (!output) {
-        return { response: "I'm having a little trouble processing that request. Could you try rephrasing or asking again in a moment? Remember to consult a doctor for medical advice."};
+        // Provide a generic error response that includes a soft reminder to consult a doctor.
+        return { response: "I'm having a little trouble processing that request. Could you try rephrasing or asking again in a moment? Remember, for specific medical advice, it's always best to consult with a healthcare professional."};
     }
     
-    // Ensure a general disclaimer is part of the response if not explicitly handled for interactions and not an emergency/crisis
-    const disclaimer = " Remember, I'm an AI assistant and this isn't medical advice. Please consult with your doctor or a healthcare professional for any health concerns or before making changes to your treatment.";
-    if (output.response && 
-        !output.response.toLowerCase().includes("medical advice") && 
-        !output.response.toLowerCase().includes("consult your doctor") && 
-        !output.response.toLowerCase().includes("emergency services") &&
-        !output.response.toLowerCase().includes("crisis hotline") &&
-        !output.response.toLowerCase().includes("988")) {
-        
-        if (!output.response.endsWith(".") && !output.response.endsWith("!") && !output.response.endsWith("?")) {
-            output.response += ".";
-        }
-        output.response += disclaimer;
-    }
+    // The automatic appending of the disclaimer has been removed.
+    // The AI is now guided by the prompt (Section H) to use disclaimers contextually.
     
     return output;
   }
 );
 
+
+    
