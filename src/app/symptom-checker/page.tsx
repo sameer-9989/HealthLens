@@ -14,7 +14,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-// Image import removed as no images are used in this file anymore
 
 const formSchema = z.object({
   symptoms: z.string().min(10, { message: "Please describe your symptoms in at least 10 characters." }),
@@ -58,6 +57,8 @@ export default function SymptomCheckerPage() {
     }
     return null;
   }
+  
+  const practoUrl = "https://www.practo.com/doctors?utm_source=opd_google&utm_medium=156227283291&utm_campaign=20298938780&gad_source=1&gad_campaignid=20298938780&gclid=Cj0KCQjwoZbBBhDCARIsAOqMEZUedzUjRHTpaZgMdNwfF1zEqrs3oE568pfm6Jpl0Ebi0WRdWwy_6jAaAsjyEALw_wcB";
 
   return (
     <div className="space-y-8 max-w-3xl mx-auto">
@@ -164,7 +165,6 @@ export default function SymptomCheckerPage() {
                         {condition.conditionName || `Suggestion ${index + 1}`}
                       </AccordionTrigger>
                       <AccordionContent className="space-y-4 pt-3 pl-2 text-sm">
-                        {/* Placeholder image for condition removed */}
                         <div>
                           <h4 className="font-semibold flex items-center mb-1"><Apple className="h-4 w-4 mr-1.5 text-green-600" /> Related Diet Suggestions:</h4>
                           <p className="text-muted-foreground whitespace-pre-wrap">{condition.relatedDietSuggestions}</p>
@@ -189,7 +189,6 @@ export default function SymptomCheckerPage() {
                                        <CardDescription className="text-xs">{med.purpose}</CardDescription>
                                   </CardHeader>
                                   <CardContent className="p-0 space-y-2">
-                                    {/* Placeholder image for medicine removed */}
                                     <p className="text-xs text-muted-foreground whitespace-pre-wrap"><strong className="text-foreground">General Dosage:</strong> {med.generalDosage}</p>
                                     <Alert variant="destructive" className="mt-2 text-xs p-2 bg-destructive/5 border-destructive/20">
                                       <InfoIcon className="h-3 w-3 !text-destructive" />
@@ -227,6 +226,13 @@ export default function SymptomCheckerPage() {
                     </AlertDescription>
                 </Alert>
             )}
+            <div className="mt-8 flex justify-center md:justify-start">
+              <Button
+                onClick={() => window.open(practoUrl, "_blank")}
+              >
+                Book an Appointment
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}

@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { virtualNursingAssistant, VirtualNursingAssistantInput, VirtualNursingAssistantOutput } from '@/ai/flows/virtual-nursing-assistant';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea'; // Changed from Input
+import { Textarea } from '@/components/ui/textarea'; 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -39,6 +39,8 @@ export default function VirtualAssistantPage() {
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
+  const practoUrl = "https://www.practo.com/doctors?utm_source=opd_google&utm_medium=156227283291&utm_campaign=20298938780&gad_source=1&gad_campaignid=20298938780&gclid=Cj0KCQjwoZbBBhDCARIsAOqMEZUedzUjRHTpaZgMdNwfF1zEqrs3oE568pfm6Jpl0Ebi0WRdWwy_6jAaAsjyEALw_wcB";
+
   useEffect(() => {
     if (scrollAreaRef.current) {
       const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
@@ -48,7 +50,7 @@ export default function VirtualAssistantPage() {
     }
   }, [messages]);
 
-  const handleSendMessage = async (e?: React.FormEvent) => { // Made event optional
+  const handleSendMessage = async (e?: React.FormEvent) => { 
     if (e) e.preventDefault();
     if (!inputValue.trim()) return;
 
@@ -157,7 +159,7 @@ export default function VirtualAssistantPage() {
                       {message.sender === 'ai' ? (
                         <SimpleMarkdownRenderer text={message.text} />
                       ) : (
-                        message.text // User messages are rendered as plain text
+                        message.text 
                       )}
                     </p>
                     <p className={cn(
@@ -203,7 +205,7 @@ export default function VirtualAssistantPage() {
           </div>
         </ScrollArea>
       </CardContent>
-      <CardFooter className="p-4 border-t">
+      <CardFooter className="p-4 border-t flex flex-col items-stretch"> 
         <form onSubmit={handleSendMessage} className="flex w-full items-end space-x-2"> 
           <Textarea
             placeholder="Type your message (Shift+Enter for new line)..."
@@ -219,9 +221,17 @@ export default function VirtualAssistantPage() {
             <span className="sr-only">Send</span>
           </Button>
         </form>
+        {messages.length > 1 && ( 
+            <div className="mt-4 flex justify-center md:justify-start w-full">
+            <Button
+                onClick={() => window.open(practoUrl, "_blank")}
+                className="w-full md:w-auto" 
+            >
+                Book an Appointment
+            </Button>
+            </div>
+        )}
       </CardFooter>
     </Card>
   );
 }
-
-    
