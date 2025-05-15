@@ -4,12 +4,11 @@ import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
 import { ArrowRight, ListChecks, Activity, YoutubeIcon } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
-// Image import removed as placeholder images are being removed
 
 export default function DashboardPage() {
   const featuredItems = mainNavItems.filter(item => item.href !== '/').slice(0, 5); 
   const selfCarePlanItem = mainNavItems.find(item => item.href === '/self-care-plans');
-  const symptomTimelineItem = mainNavItems.find(item => item.href === '/symptom-timeline');
+  const symptomTimelineItem = mainNavItems.find(item => item.href === '/symptom-timeline'); // This feature was removed, might need to update logic if it's null
   const stressReliefYogaItem = mainNavItems.find(item => item.href === '/stress-relief-yoga');
 
   return (
@@ -44,8 +43,8 @@ export default function DashboardPage() {
         <h2 className="text-2xl font-semibold mb-4">Quick Access</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {featuredItems.map((item) => (
-            <Link href={item.href} key={item.href} className="block hover:no-underline">
-              <Card className={`shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col ${item.color || 'bg-card'}`}>
+            <Link href={item.href} key={item.href} className="block hover:no-underline group">
+              <Card className={`shadow-md hover:shadow-xl transition-all duration-300 ease-in-out group-hover:scale-[1.03] h-full flex flex-col ${item.color || 'bg-card'}`}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-lg font-medium">{item.title}</CardTitle>
                   <item.icon className="h-6 w-6 text-primary" />
@@ -56,8 +55,8 @@ export default function DashboardPage() {
                   </p>
                 </CardContent>
                 <CardContent className="pt-0">
-                   <Button variant="link" className="p-0 h-auto text-primary">
-                    Go to {item.title} <ArrowRight className="ml-1 h-3 w-3" />
+                   <Button variant="link" className="p-0 h-auto text-primary group-hover:underline">
+                    Go to {item.title} <ArrowRight className="ml-1 h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" />
                   </Button>
                 </CardContent>
               </Card>
@@ -73,8 +72,8 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {selfCarePlanItem && (
-              <Link href={selfCarePlanItem.href} className="block hover:no-underline">
-                   <Card className="hover:bg-accent/50 transition-colors h-full">
+              <Link href={selfCarePlanItem.href} className="block hover:no-underline group">
+                   <Card className="hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors h-full group-hover:shadow-lg">
                       <CardHeader className="flex flex-row items-center gap-4">
                           <ListChecks className="h-8 w-8 text-primary" />
                           <div>
@@ -85,9 +84,9 @@ export default function DashboardPage() {
                    </Card>
               </Link>
             )}
-            {symptomTimelineItem && (
-              <Link href={symptomTimelineItem.href} className="block hover:no-underline">
-                   <Card className="hover:bg-accent/50 transition-colors h-full">
+            {symptomTimelineItem && ( // Symptom Timeline was removed, this might cause issues if item is undefined
+              <Link href={symptomTimelineItem.href} className="block hover:no-underline group">
+                   <Card className="hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors h-full group-hover:shadow-lg">
                       <CardHeader className="flex flex-row items-center gap-4">
                           <Activity className="h-8 w-8 text-primary" />
                           <div>
@@ -99,8 +98,8 @@ export default function DashboardPage() {
               </Link>
             )}
             {stressReliefYogaItem && (
-              <Link href={stressReliefYogaItem.href} className="block hover:no-underline">
-                   <Card className="hover:bg-accent/50 transition-colors h-full">
+              <Link href={stressReliefYogaItem.href} className="block hover:no-underline group">
+                   <Card className="hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors h-full group-hover:shadow-lg">
                       <CardHeader className="flex flex-row items-center gap-4">
                           <YoutubeIcon className="h-8 w-8 text-primary" />
                           <div>
