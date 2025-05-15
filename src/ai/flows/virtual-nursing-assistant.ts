@@ -60,6 +60,7 @@ const prompt = ai.definePrompt({
   *   **Graceful Topic Shifts:** If the user pauses or changes topics, you can gently refer back to previous context if it seems relevant: "Okay. Earlier you mentioned feeling overwhelmed. Would you like to continue with that, or explore something else related to your current message?"
   *   **Be Natural and Varied:** Aim for a human-like conversational flow. Use varied phrasing, especially for common topics like mental health support or symptom discussion.
   *   **Concise and Unique:** Strive to make each response fresh and avoid rephrasing your previous statements or unnecessarily echoing the user's input unless clarifying a complex point.
+  *   **Emphasis:** When you want to emphasize something, you may use **bold text** for bold or _italic text_ for italics. Do not use other markdown syntax like headings, lists, or links, as they will not be rendered correctly.
   *   **Limit Feedback Requests:** Avoid asking "Was this helpful?" often.
   *   **Empathetic & Adaptive Tone:** Understand user tone and emotion from their messages and history. Respond with genuine empathy. Example: "I can hear that this has been really frustrating for you," or "You’re not alone in feeling this way — let’s explore how to help."
 
@@ -98,7 +99,7 @@ const prompt = ai.definePrompt({
   G.  **Yoga & Stretching Suggestions for Stress/Discomfort:** (As previously defined, but acknowledge user's stated issue from current message or history)
 
   H. **Safety, Disclaimers, and Empathetic Tone (Continued):**
-      *   **Disclaimer Handling:** Use disclaimers contextually. If a disclaimer was recently given (check history or session flags if possible), a softer reminder might be sufficient or none at all for general chat. Prioritize for new medical topics.
+      *   **Disclaimer Handling:** Be mindful of disclaimer repetition. Provide the full medical disclaimer ("Remember, I'm an AI assistant and this isn't medical advice. Please consult with your doctor or a healthcare professional for any health concerns or before making changes to your treatment.") only when discussing specific medication interactions, new treatment suggestions, or detailed symptom analysis that might be construed as diagnosis. For general health tips or empathetic responses, a softer reminder like "For any serious concerns, a healthcare provider is the best resource" or no disclaimer might be appropriate if one was given recently in the conversation (check '{{conversationHistory}}'). Prioritize safety and clarity, but avoid making every message sound robotic with disclaimers.
       *   **Emergency Situations & Crisis:** (As previously defined - these override general conversational flow).
 
   Generate the 'response' field. Use 'interactionWarning', 'suggestedAction', and 'suggestedYogaRoutines' as needed.
@@ -123,7 +124,7 @@ const virtualNursingAssistantFlow = ai.defineFlow(
   },
   async input => {
     // Basic check for physical emergency phrases.
-    const physicalEmergencyPhrases = ["can't breathe", "chest pain", "heart attack", "stroke", "bleeding uncontrollably", "severe allergic reaction", "emergency help"];
+    const physicalEmergencyPhrases = ["can't breathe", "chest pain", "heart attack", "stroke", "bleeding uncontrollably", "severe allergic reaction", "emergency help", "emergency room", "urgent care"];
     if (physicalEmergencyPhrases.some(phrase => input.message.toLowerCase().includes(phrase))) {
       return {
         response: "If you are experiencing a medical emergency, please call your local emergency services (e.g., 911, 112, 999) or go to the nearest emergency room immediately. I am an AI assistant and cannot provide emergency medical help.",
@@ -131,7 +132,7 @@ const virtualNursingAssistantFlow = ai.defineFlow(
     }
     
     // Basic check for immediate mental health crisis phrases (self-harm, suicide).
-    const mentalHealthCrisisPhrases = ["kill myself", "want to die", "self harm", "suicidal thoughts", "ending my life", "don't want to live"];
+    const mentalHealthCrisisPhrases = ["kill myself", "want to die", "self harm", "suicidal thoughts", "ending my life", "don't want to live", "no reason to live"];
      if (mentalHealthCrisisPhrases.some(phrase => input.message.toLowerCase().includes(phrase))) {
       return {
         response: "It sounds like you're going through a very difficult time. If you're in crisis or need immediate support, please reach out to a crisis hotline or mental health professional. There are people who want to help. In the US, you can call or text 988. For other regions, please search for your local crisis support line.",

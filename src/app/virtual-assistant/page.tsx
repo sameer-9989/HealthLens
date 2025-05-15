@@ -21,6 +21,18 @@ interface Message {
   suggestedAction?: string;
 }
 
+// Helper component for simple markdown rendering
+const SimpleMarkdownRenderer: React.FC<{ text: string }> = ({ text }) => {
+  let processedText = text;
+  // Replace **bold** with <strong>bold</strong>
+  processedText = processedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // Replace _italic_ with <em>italic</em>
+  processedText = processedText.replace(/\_(.*?)\_/g, '<em>$1</em>');
+  // Note: This is a basic replacement. More complex markdown would require a proper library.
+  return <span dangerouslySetInnerHTML={{ __html: processedText }} />;
+};
+
+
 export default function VirtualAssistantPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -104,16 +116,7 @@ export default function VirtualAssistantPage() {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       if (!isLoading && inputValue.trim()) {
-        // Directly call handleSendMessage or trigger form submission
-        // To ensure the form's onSubmit is called, which includes e.preventDefault()
-        const form = event.currentTarget.form;
-        if (form) {
-          // Check if button is truly enabled (not just visually)
-          const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-          if (submitButton && !submitButton.disabled) {
-             handleSendMessage(); 
-          }
-        }
+        handleSendMessage(); 
       }
     }
   };
@@ -150,7 +153,13 @@ export default function VirtualAssistantPage() {
                         : 'bg-secondary text-secondary-foreground rounded-bl-none'
                     )}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                    <p className="text-sm whitespace-pre-wrap">
+                      {message.sender === 'ai' ? (
+                        <SimpleMarkdownRenderer text={message.text} />
+                      ) : (
+                        message.text // User messages are rendered as plain text
+                      )}
+                    </p>
                     <p className={cn(
                         "text-xs mt-1.5",
                         message.sender === 'user' ? 'text-primary-foreground/70 text-right' : 'text-muted-foreground text-left'
@@ -174,7 +183,9 @@ export default function VirtualAssistantPage() {
                 {message.sender === 'ai' && message.suggestedAction && (
                    <Alert variant="default" className="mt-2 ml-10 max-w-[80%] bg-accent/20 border-accent/50">
                     <AlertTitle className="font-semibold">Suggested Action/Exercise</AlertTitle>
-                    <AlertDescription className="whitespace-pre-wrap">{message.suggestedAction}</AlertDescription>
+                    <AlertDescription className="whitespace-pre-wrap">
+                       <SimpleMarkdownRenderer text={message.suggestedAction} />
+                    </AlertDescription>
                   </Alert>
                 )}
               </div>
@@ -193,13 +204,13 @@ export default function VirtualAssistantPage() {
         </ScrollArea>
       </CardContent>
       <CardFooter className="p-4 border-t">
-        <form onSubmit={handleSendMessage} className="flex w-full items-end space-x-2"> {/* Changed items-center to items-end */}
+        <form onSubmit={handleSendMessage} className="flex w-full items-end space-x-2"> 
           <Textarea
             placeholder="Type your message (Shift+Enter for new line)..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleTextareaKeyDown}
-            className="flex-1 resize-none text-base min-h-[40px] max-h-[180px]" // Adjusted min-h and added max-h
+            className="flex-1 resize-none text-base min-h-[40px] max-h-[180px]" 
             disabled={isLoading}
             autoFocus
           />
@@ -212,3 +223,5 @@ export default function VirtualAssistantPage() {
     </Card>
   );
 }
+
+    
