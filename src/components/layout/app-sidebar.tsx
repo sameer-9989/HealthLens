@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -14,8 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { mainNavItems, secondaryNavItems } from '@/config/nav';
 import { HealthLensLogo } from '@/components/icons/health-lens-logo';
-import { Button } from '@/components/ui/button';
-import { LogOut, Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react'; // LogOut icon removed
 import { cn } from '@/lib/utils';
 
 export function AppSidebar() {
@@ -113,20 +113,7 @@ export function AppSidebar() {
               {sidebarState === 'expanded' && <span>{isDarkMode ? "Light Mode" : "Dark Mode"}</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              aria-label="Logout"
-              tooltip={sidebarState === 'collapsed' ? "Logout" : undefined}
-              className={cn(
-                "justify-start text-destructive hover:bg-destructive/10 hover:text-destructive",
-                sidebarState === 'collapsed' && "justify-center"
-              )}
-              onClick={() => alert("Logout functionality not implemented.")}
-            >
-              <LogOut className="shrink-0" />
-              {sidebarState === 'expanded' && <span>Logout</span>}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {/* Logout option has been removed here */}
         </SidebarMenu>
       </SidebarFooter>
     </>

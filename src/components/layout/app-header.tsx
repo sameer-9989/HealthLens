@@ -1,10 +1,10 @@
+
 "use client";
 
 import React from 'react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Bell, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Input } from '../ui/input';
 import { usePathname } from 'next/navigation';
 import { mainNavItems } from '@/config/nav';
@@ -30,14 +30,7 @@ export function AppHeader() {
             className="pl-8 sm:w-[200px] md:w-[300px] rounded-full h-9"
           />
         </div>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <Bell className="h-5 w-5" />
-          <span className="sr-only">Notifications</span>
-        </Button>
-        <Avatar className="h-9 w-9">
-          <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint="person portrait" />
-          <AvatarFallback>HL</AvatarFallback>
-        </Avatar>
+        {/* Notification Bell and Profile Icon have been removed here */}
       </div>
     </header>
   );
