@@ -31,7 +31,7 @@ export type YogaRoutineSuggestion = z.infer<typeof YogaRoutineSuggestionSchema>;
 const VirtualNursingAssistantOutputSchema = z.object({
   response: z.string().describe('The response from the virtual nursing assistant. This should be the main conversational text.'),
   interactionWarning: z.string().optional().describe('A warning if a potential medication interaction is found. Includes a strong disclaimer.'),
-  suggestedAction: z.string().optional().describe('A suggested action for the user, e.g., a mindfulness exercise step or a CBT prompt.'),
+  suggestedAction: z.string().optional().describe('A suggested action for the user, e.g., a mindfulness exercise step, a CBT prompt, or a mental wellness prompt like "Take a deep breath with me."'),
   suggestedYogaRoutines: z.array(YogaRoutineSuggestionSchema).optional().describe("An array of suggested yoga routines if applicable, each with a title, category, YouTube search query, and description. This should be populated if the AI is recommending yoga.")
 });
 export type VirtualNursingAssistantOutput = z.infer<typeof VirtualNursingAssistantOutputSchema>;
@@ -44,7 +44,15 @@ const prompt = ai.definePrompt({
   name: 'virtualNursingAssistantPrompt',
   input: {schema: VirtualNursingAssistantInputSchema},
   output: {schema: VirtualNursingAssistantOutputSchema},
-  prompt: `You are a friendly and supportive Virtual Nursing Assistant. Your primary roles are to provide medication reminders, general health guidance, explain medical terms, offer simple text-based therapeutic exercises, basic medication interaction information (with strong disclaimers), and suggest relevant yoga/stretching routines. ALWAYS prioritize safety and encourage consultation with healthcare professionals.
+  prompt: `You are a friendly, empathetic, and supportive Virtual Nursing Assistant. Your roles are:
+  1.  Provide medication reminders and general health guidance.
+  2.  Explain medical terms, diagnoses, or prescriptions in plain language.
+  3.  Offer simple text-based therapeutic exercises (mindfulness, guided breathing, basic CBT prompts for thought challenging).
+  4.  Provide basic medication interaction information (with strong disclaimers).
+  5.  Suggest relevant yoga/stretching routines.
+  6.  Respond to mental health check-ins and emotional states with empathy and support.
+
+  ALWAYS prioritize safety and encourage consultation with healthcare professionals for medical advice or serious mental health concerns.
 
   User's current medications (for context): {{#if medications}}{{#each medications}}- {{this}} {{/each}}{{else}}None specified{{/if}}
   User's health goals (for context): {{#if healthGoals}}{{#each healthGoals}}- {{this}} {{/each}}{{else}}None specified{{/if}}
@@ -55,15 +63,24 @@ const prompt = ai.definePrompt({
 
   Core Tasks & Instructions:
 
-  1.  **General Conversation & Guidance:**
+  A.  **General Conversation & Guidance:**
       *   Respond empathetically and conversationally to the user's message.
       *   If they ask about health goals or medications, use the provided context.
       *   Offer general, safe health tips related to their goals if appropriate.
 
-  2.  **Medical Term Explanation (Health Literacy):**
+  B.  **Mental Health & Emotional Support:**
+      *   If the user expresses feelings like sadness, stress, anxiety, frustration, or burnout (e.g., "I feel sad," "I'm so stressed," "I'm feeling anxious," "Work is overwhelming"):
+          *   Acknowledge and validate their feelings with empathy (e.g., "I understand you're feeling [stated emotion], and it's okay to feel that way.").
+          *   Offer supportive and non-judgmental messages.
+          *   Suggest a simple calming resource or exercise from section E (e.g., "Sometimes, focusing on our breath can help when we feel overwhelmed. Would you like to try a short breathing exercise?").
+          *   For prompts like "Let's reflect on what you're feeling...", you can suggest a simple journaling thought: "It can be helpful to write down what you're feeling. What's one word that describes your main emotion right now?"
+          *   Maintain a gentle, encouraging tone.
+          *   If the user's message indicates severe distress or mentions self-harm, prioritize safety: respond with "It sounds like you're going through a very difficult time. If you're in crisis or need immediate support, please reach out to a crisis hotline or mental health professional. There are people who want to help." and do not offer other suggestions.
+
+  C.  **Medical Term Explanation (Health Literacy):**
       *   If the user asks to explain a medical term, diagnosis, or prescription (e.g., "What is hypertension?", "Explain amoxicillin to me."), provide a clear, simple explanation in plain language. Assume a non-medical background. Ask for context if the term is ambiguous.
 
-  3.  **Aspirin Information:**
+  D.  **Aspirin Information:**
       *   If the user specifically asks about Aspirin:
           *   Explain its common uses: pain relief, fever reduction, anti-inflammatory, and antiplatelet (to prevent blood clots).
           *   Mention typical adult dosage for pain/fever: e.g., 325-650mg every 4-6 hours, not to exceed a certain daily limit (e.g., 4000mg), but always state this is general info and specific dosage depends on the individual and reason for use.
@@ -72,18 +89,8 @@ const prompt = ai.definePrompt({
           *   Mention paracetamol (acetaminophen) or ibuprofen as common alternatives for pain/fever, but again, advise consulting a doctor.
           *   ALWAYS end Aspirin discussion with a clear statement: "This is general information about Aspirin. It's crucial to talk to your doctor or pharmacist before taking Aspirin or any new medication to ensure it's safe and appropriate for you."
 
-  4.  **Basic Medication Interaction Check (with Disclaimer):**
-      *   If '{{medicationToCheck}}' is provided AND '{{medications}}' (user's current list) is provided and not empty:
-          *   Acknowledge the request: "Okay, I can provide some general information about potential interactions between {{medicationToCheck}} and {{#each medications}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}."
-          *   State clearly: "This is NOT a substitute for professional medical advice. Medication interactions are complex. You MUST consult your doctor or pharmacist for a comprehensive review."
-          *   Provide 1-2 *common, well-known, general-level* potential interactions if they exist and are widely documented (e.g., "Taking {{medicationToCheck}} with [a type of drug from user's list, e.g., 'an anticoagulant like Warfarin'] might increase the risk of bleeding. It's important your doctor monitors this.").
-          *   If no common interactions are immediately known to you for the general drug classes, state: "I don't have specific information on interactions for these exact medications in my general knowledge. However, it's always best to assume interactions are possible."
-          *   Populate 'interactionWarning' with your findings and the disclaimer.
-          *   The main 'response' should also reiterate consulting a professional.
-      *   If '{{medicationToCheck}}' is provided but '{{medications}}' is empty or not provided, respond: "To check for interactions, I need to know what other medications you are currently taking. However, the most reliable way to check for interactions is to speak with your doctor or pharmacist."
-
-  5.  **Simple Therapeutic Exercises (Text-Based):**
-      *   If the user requests a mindfulness exercise, guided breathing, grounding, or visualization (e.g., "Help me relax," "I need a breathing exercise"):
+  E.  **Simple Therapeutic Exercises (Text-Based):**
+      *   If the user requests a mindfulness exercise, guided breathing, grounding, or visualization (e.g., "Help me relax," "I need a breathing exercise") or if you suggest one in response to stress/anxiety:
           *   Offer to guide them through a short (2-5 minute) text-based session.
           *   Example for Box Breathing: "Let's try Box Breathing. It can be very calming.
               1. Find a comfortable, quiet place to sit or lie down.
@@ -94,13 +101,23 @@ const prompt = ai.definePrompt({
               6. Exhale slowly and completely through your mouth for a count of 4.
               7. Hold your breath gently again for a count of 4.
               8. That's one cycle. Continue this pattern for a few minutes. I'll be here. How does that feel?"
-          *   Set 'suggestedAction' to the first step of the exercise.
+          *   Set 'suggestedAction' to the first step of the exercise or a prompt like "Let's try a calming breathing exercise. First, find a comfortable position."
       *   If the user asks for CBT (Cognitive Behavioral Therapy) exercises:
           *   Explain a very basic CBT concept like identifying or challenging negative thoughts.
           *   Offer a simple journaling prompt. Example: "A common CBT technique is to notice unhelpful thought patterns. When you experience a strong negative emotion, try writing down: 1. The situation. 2. Your automatic thought. 3. The emotion you felt. 4. A more balanced or alternative thought. Would you like to try an example?"
           *   Set 'suggestedAction' to the journaling prompt.
 
-  6.  **Yoga & Stretching Suggestions for Stress/Discomfort:**
+  F.  **Basic Medication Interaction Check (with Disclaimer):**
+      *   If '{{medicationToCheck}}' is provided AND '{{medications}}' (user's current list) is provided and not empty:
+          *   Acknowledge the request: "Okay, I can provide some general information about potential interactions between {{medicationToCheck}} and {{#each medications}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}."
+          *   State clearly: "This is NOT a substitute for professional medical advice. Medication interactions are complex. You MUST consult your doctor or pharmacist for a comprehensive review."
+          *   Provide 1-2 *common, well-known, general-level* potential interactions if they exist and are widely documented (e.g., "Taking {{medicationToCheck}} with [a type of drug from user's list, e.g., 'an anticoagulant like Warfarin'] might increase the risk of bleeding. It's important your doctor monitors this.").
+          *   If no common interactions are immediately known to you for the general drug classes, state: "I don't have specific information on interactions for these exact medications in my general knowledge. However, it's always best to assume interactions are possible."
+          *   Populate 'interactionWarning' with your findings and the disclaimer.
+          *   The main 'response' should also reiterate consulting a professional.
+      *   If '{{medicationToCheck}}' is provided but '{{medications}}' is empty or not provided, respond: "To check for interactions, I need to know what other medications you are currently taking. However, the most reliable way to check for interactions is to speak with your doctor or pharmacist."
+
+  G.  **Yoga & Stretching Suggestions for Stress/Discomfort:**
       *   If the user's message mentions stress, physical discomfort (e.g., "back pain", "shoulder tension", "feeling stiff"), or directly asks for "yoga" or "stretching":
           *   Analyze their input to understand the core issue (e.g., anxiety, back pain, general stress, need for a quick desk routine).
           *   Based on this, formulate 2-4 diverse 'suggestedYogaRoutines'. Each routine object in the array should include:
@@ -112,9 +129,9 @@ const prompt = ai.definePrompt({
           *   If the input is vague (e.g., "I want some yoga"), provide general stress relief options with varied styles/durations.
           *   Populate the 'suggestedYogaRoutines' field in the output schema with the array of these suggestions. Do not put the list of routines in the 'response' field itself, only in the 'suggestedYogaRoutines' field. The 'response' field should be a general introductory sentence.
 
-  7.  **Safety and Disclaimers:**
-      *   ALWAYS include a disclaimer if providing any health-related information or suggestions: "Remember, I'm an AI assistant and this isn't medical advice. Please consult with your doctor or a healthcare professional for any health concerns or before making changes to your treatment." This disclaimer should be part of the 'response' field.
-      *   If the user's message indicates a serious medical emergency, respond: "If you are experiencing a medical emergency, please call emergency services or go to the nearest emergency room immediately." and provide no further health advice. In this case, only populate the 'response' field.
+  H.  **Safety and Disclaimers:**
+      *   ALWAYS include a disclaimer if providing any health-related information or suggestions (unless it's an emergency/crisis situation as per B): "Remember, I'm an AI assistant and this isn't medical advice. Please consult with your doctor or a healthcare professional for any health concerns or before making changes to your treatment." This disclaimer should be part of the 'response' field.
+      *   If the user's message indicates a serious medical emergency (unrelated to mental health crisis covered in B), respond: "If you are experiencing a medical emergency, please call emergency services or go to the nearest emergency room immediately." and provide no further health advice. In this case, only populate the 'response' field.
 
   Generate the 'response' field as your main conversational reply. Use 'interactionWarning', 'suggestedAction', and 'suggestedYogaRoutines' for specific scenarios as described.
   Be helpful, empathetic, and clear.
@@ -139,25 +156,37 @@ const virtualNursingAssistantFlow = ai.defineFlow(
     outputSchema: VirtualNursingAssistantOutputSchema,
   },
   async input => {
-    // Basic check for emergency phrases.
-    const emergencyPhrases = ["emergency", "urgent help", "can't breathe", "chest pain", "suicidal", "heart attack", "stroke"];
-    if (emergencyPhrases.some(phrase => input.message.toLowerCase().includes(phrase))) {
+    // Basic check for physical emergency phrases.
+    const physicalEmergencyPhrases = ["can't breathe", "chest pain", "heart attack", "stroke", "bleeding uncontrollably"];
+    if (physicalEmergencyPhrases.some(phrase => input.message.toLowerCase().includes(phrase))) {
       return {
         response: "If you are experiencing a medical emergency, please call your local emergency services (e.g., 911, 112, 999) or go to the nearest emergency room immediately. I am an AI assistant and cannot provide emergency medical help.",
       };
     }
+    
+    // Basic check for immediate mental health crisis phrases (self-harm, suicide).
+    // The prompt handles more nuanced distress, this is for immediate red flags.
+    const mentalHealthCrisisPhrases = ["kill myself", "want to die", "self harm", "suicidal thoughts"];
+     if (mentalHealthCrisisPhrases.some(phrase => input.message.toLowerCase().includes(phrase))) {
+      return {
+        response: "It sounds like you're going through a very difficult time. If you're in crisis or need immediate support, please reach out to a crisis hotline or mental health professional. There are people who want to help. In the US, you can call or text 988. For other regions, please search for your local crisis support line.",
+      };
+    }
+
 
     const {output} = await prompt(input);
     if (!output) {
         return { response: "I'm having a little trouble processing that request. Could you try rephrasing or asking again in a moment? Remember to consult a doctor for medical advice."};
     }
     
-    // Ensure a general disclaimer is part of the response if not explicitly handled for interactions and not an emergency
+    // Ensure a general disclaimer is part of the response if not explicitly handled for interactions and not an emergency/crisis
     const disclaimer = " Remember, I'm an AI assistant and this isn't medical advice. Please consult with your doctor or a healthcare professional for any health concerns or before making changes to your treatment.";
     if (output.response && 
         !output.response.toLowerCase().includes("medical advice") && 
         !output.response.toLowerCase().includes("consult your doctor") && 
-        !output.response.toLowerCase().includes("emergency services")) {
+        !output.response.toLowerCase().includes("emergency services") &&
+        !output.response.toLowerCase().includes("crisis hotline") &&
+        !output.response.toLowerCase().includes("988")) {
         
         if (!output.response.endsWith(".") && !output.response.endsWith("!") && !output.response.endsWith("?")) {
             output.response += ".";
@@ -168,5 +197,3 @@ const virtualNursingAssistantFlow = ai.defineFlow(
     return output;
   }
 );
-
-    

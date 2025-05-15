@@ -4,7 +4,8 @@ import {
   LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Settings,
   Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
   PowerOff, YoutubeIcon, Zap as StressIcon,
-  Lightbulb, GitCompareArrows, Wind, Users, Info
+  Lightbulb, GitCompareArrows, Wind, Users, Info, FileText, // Added FileText
+  ListChecks // Added ListChecks
 } from 'lucide-react';
 
 export interface NavItem {
@@ -35,7 +36,7 @@ export const mainNavItems: NavItem[] = [
     title: 'Virtual Assistant',
     href: '/virtual-assistant',
     icon: MessageCircleHeart,
-    description: 'Chat for med info, term explanations, mindfulness, & health guidance.',
+    description: 'Chat for med info, term explanations, mindfulness, mental wellness support & health guidance.',
     color: "bg-blue-100 dark:bg-blue-900"
   },
   {
@@ -48,7 +49,7 @@ export const mainNavItems: NavItem[] = [
   {
     title: 'Stress Relief Yoga',
     href: '/stress-relief-yoga',
-    icon: StressIcon,
+    icon: StressIcon, // Using Zap as StressIcon
     description: 'AI-suggested yoga types and example video routines for stress.',
     color: "bg-orange-100 dark:bg-orange-900"
   },
@@ -90,19 +91,35 @@ export const mainNavItems: NavItem[] = [
   {
     title: 'Body Scan Visualizer',
     href: '/body-scan-visualizer',
-    icon: Users,
+    icon: Users, // Consider AnatomicalHeart if more specific
     description: 'Learn about body parts, common issues, and care.',
     color: "bg-pink-100 dark:bg-pink-900"
   },
-  {
-    title: 'Mental Health Check-In',
-    href: '/mental-health-checkin',
-    icon: UserCheck,
-    description: 'Emotionally intelligent mental health support (Placeholder).',
-    color: "bg-rose-100 dark:bg-rose-900"
-  },
+  // Standalone Mental Health Check-in removed, functionality merged to Virtual Assistant
+  // {
+  //   title: 'Mental Health Check-In',
+  //   href: '/mental-health-checkin',
+  //   icon: UserCheck,
+  //   description: 'Emotionally intelligent mental health support.',
+  //   color: "bg-rose-100 dark:bg-rose-900"
+  // },
 ];
+
+// Features that were removed or merged, showing their original icons for reference if needed
+const removedFeaturePlaceholders: NavItem[] = [
+    { title: 'Health Literacy Coach', href: '/health-literacy-coach', icon: HelpCircle, description: "Merged into Virtual Assistant." },
+    { title: 'Therapeutics Library', href: '/therapeutics-library', icon: Palette, description: "Merged into Virtual Assistant." }, // Palette was an example
+    { title: 'Care Coordination', href: '/care-coordination', icon: Users /* or another icon like FileText */, description: "Removed." },
+    { title: 'Routine Builder', href: '/routine-builder', icon: ListChecks, description: "Streamlined into Self-Care Plans." },
+    { title: 'Multilingual Companion', href: '/multilingual-companion', icon: BotMessageSquare, description: "Merged into Symptom Checker." },
+    { title: 'Symptom Timeline', href: '/symptom-timeline', icon: Activity, description: "Removed."},
+    { title: 'Journal Synthesizer', href: '/journal-synthesizer', icon: FileText, description: "Removed."},
+    { title: 'Question Formulator', href: '/question-formulator', icon: HelpCircle, description: "Removed."},
+    { title: 'Emergency Info', href: '/emergency-info', icon: ShieldAlert, description: "Removed."}
+];
+
 
 export const secondaryNavItems: NavItem[] = [
   { title: 'Settings', href: '/settings', icon: Settings },
+  // { title: 'Help & FAQ', href: '/help', icon: HelpCircle }, // Example, if added
 ];
