@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Settings,
   FileText, Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
-  PowerOff, Youtube as YoutubeIcon, Zap as StressIcon, Image as ImageIcon // Added ImageIcon
+  PowerOff, Youtube as YoutubeIcon, Zap as StressIcon, Image as ImageIcon
 } from 'lucide-react';
 
 export interface NavItem {
@@ -71,13 +71,6 @@ export const mainNavItems: NavItem[] = [
     icon: Brain,
     description: 'Daily prompts to assess cognitive functions and emotional wellness.',
     color: "bg-lime-100 dark:bg-lime-900"
-  },
-   {
-    title: 'AI Image Gallery',
-    href: '/ai-image-gallery',
-    icon: ImageIcon,
-    description: 'Generate & browse AI-created images for health topics.',
-    color: "bg-indigo-100 dark:bg-indigo-900"
   },
   { 
     title: 'Journal Synthesizer', 

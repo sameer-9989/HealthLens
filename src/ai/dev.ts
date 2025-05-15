@@ -11,7 +11,7 @@ import '@/ai/flows/symptom-playback-timeline.ts'; // For analyzing user-inputted
 
 // New AI Features
 import '@/ai/flows/digital-detox-guidance.ts'; // For Digital Detox Tool
-import '@/ai/flows/generate-image-flow.ts'; // For AI Image Generation
+// import '@/ai/flows/generate-image-flow.ts'; // Removed
 
 // Placeholder/Future AI Features (flows might still exist if pages are placeholders)
 import '@/ai/flows/ai-mood-language-monitor.ts'; // If Mental Health Check-in uses parts of it
