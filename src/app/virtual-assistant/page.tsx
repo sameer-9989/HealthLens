@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { virtualNursingAssistant, VirtualNursingAssistantInput, VirtualNursingAssistantOutput } from '@/ai/flows/virtual-nursing-assistant';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea'; // Changed from Input
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -36,8 +36,8 @@ export default function VirtualAssistantPage() {
     }
   }, [messages]);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendMessage = async (e?: React.FormEvent) => { // Made event optional
+    if (e) e.preventDefault();
     if (!inputValue.trim()) return;
 
     const userMessage: Message = {
@@ -47,11 +47,9 @@ export default function VirtualAssistantPage() {
       timestamp: new Date(),
     };
     
-    // Prepare conversation history string for the AI
-    // This includes the new user message to provide context for the current AI response
     const currentMessagesWithUser = [...messages, userMessage];
     const historyForAI = currentMessagesWithUser
-      .slice(-6) // Limit to last ~3 turns (6 messages) to keep prompt concise
+      .slice(-6) 
       .map(msg => `${msg.sender === 'user' ? 'User' : 'Assistant'}: ${msg.text}`)
       .join('\n');
 
@@ -101,6 +99,24 @@ export default function VirtualAssistantPage() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleTextareaKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      if (!isLoading && inputValue.trim()) {
+        // Directly call handleSendMessage or trigger form submission
+        // To ensure the form's onSubmit is called, which includes e.preventDefault()
+        const form = event.currentTarget.form;
+        if (form) {
+          // Check if button is truly enabled (not just visually)
+          const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+          if (submitButton && !submitButton.disabled) {
+             handleSendMessage(); 
+          }
+        }
+      }
+    }
+  };
 
   return (
     <Card className="shadow-lg w-full flex flex-col h-[calc(100vh-8rem)] max-h-[700px] md:max-h-full">
@@ -177,13 +193,13 @@ export default function VirtualAssistantPage() {
         </ScrollArea>
       </CardContent>
       <CardFooter className="p-4 border-t">
-        <form onSubmit={handleSendMessage} className="flex w-full items-center space-x-2">
-          <Input
-            type="text"
-            placeholder="Type your message..."
+        <form onSubmit={handleSendMessage} className="flex w-full items-end space-x-2"> {/* Changed items-center to items-end */}
+          <Textarea
+            placeholder="Type your message (Shift+Enter for new line)..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="flex-1 h-10 text-base"
+            onKeyDown={handleTextareaKeyDown}
+            className="flex-1 resize-none text-base min-h-[40px] max-h-[180px]" // Adjusted min-h and added max-h
             disabled={isLoading}
             autoFocus
           />
@@ -196,5 +212,3 @@ export default function VirtualAssistantPage() {
     </Card>
   );
 }
-
-    
