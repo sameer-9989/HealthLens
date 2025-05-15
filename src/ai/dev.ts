@@ -6,7 +6,7 @@ config();
 import '@/ai/flows/ai-symptom-checker.ts';
 import '@/ai/flows/virtual-nursing-assistant.ts';
 import '@/ai/flows/self-care-plan-generator.ts';
-// import '@/ai/flows/cognitive-health-tracker.ts'; // Removed
+import '@/ai/flows/daily-wellness-tip-generator.ts'; // For Health Tracker
 
 // New AI Features from this request
 import '@/ai/flows/ai-health-myth-buster.ts';
@@ -16,6 +16,7 @@ import '@/ai/flows/ai-health-myth-buster.ts';
 
 // Other Existing/Future AI Features
 // import '@/ai/flows/digital-detox-guidance.ts'; // Removed
+// import '@/ai/flows/cognitive-health-tracker.ts'; // Removed
 
 // Placeholder/Future AI Features (flows might still exist if pages are placeholders)
 import '@/ai/flows/ai-mood-language-monitor.ts'; // If Mental Health Check-in uses parts of it
@@ -41,4 +42,7 @@ import '@/ai/flows/conversational-health-coach.ts';
 // import '@/ai/flows/mental-health-check-in-companion.ts'; // Merged into VA
 // import '@/ai/flows/ai-body-scan-visualizer.ts'; // Removed
 // import '@/ai/flows/ai-habit-conflict-detector.ts'; // Removed
+// import '@/ai/flows/cognitive-health-tracker.ts'; // Removed
+// import '@/ai/flows/digital-detox-guidance.ts'; // Removed
 
+    
