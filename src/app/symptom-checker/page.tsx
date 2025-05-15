@@ -1,19 +1,25 @@
+
 "use client";
 
 import React, { useState } from 'react';
 import { symptomChecker, SymptomCheckerInput, SymptomCheckerOutput } from '@/ai/flows/ai-symptom-checker';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, Lightbulb, CheckCircle2 } from 'lucide-react';
+import { Loader2, AlertTriangle, Lightbulb, CheckCircle2, Pill, Apple, Bike, LanguagesIcon, Globe } from 'lucide-react'; // Added Pill, Apple, Bike for new fields
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 
 const formSchema = z.object({
   symptoms: z.string().min(10, { message: "Please describe your symptoms in at least 10 characters." }),
+  language: z.string().optional(),
+  culture: z.string().optional(),
 });
 type FormData = z.infer<typeof formSchema>;
 
@@ -31,7 +37,7 @@ export default function SymptomCheckerPage() {
     setError(null);
     setResult(null);
     try {
-      const output = await symptomChecker({ symptoms: data.symptoms });
+      const output = await symptomChecker(data as SymptomCheckerInput);
       setResult(output);
     } catch (e) {
       setError('An error occurred while checking symptoms. Please try again.');
@@ -62,6 +68,30 @@ export default function SymptomCheckerPage() {
               />
               {errors.symptoms && <p className="text-sm text-destructive mt-1">{errors.symptoms.message}</p>}
             </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="language" className="text-base">Language (Optional)</Label>
+                <Input
+                  id="language"
+                  placeholder="e.g., es, fr (default: en)"
+                  className="mt-1 text-base"
+                  {...register("language")}
+                />
+                {errors.language && <p className="text-sm text-destructive mt-1">{errors.language.message}</p>}
+              </div>
+              <div>
+                <Label htmlFor="culture" className="text-base">Cultural Context (Optional)</Label>
+                <Input
+                  id="culture"
+                  placeholder="e.g., Hispanic, South Asian"
+                  className="mt-1 text-base"
+                  {...register("culture")}
+                />
+                {errors.culture && <p className="text-sm text-destructive mt-1">{errors.culture.message}</p>}
+              </div>
+            </div>
+            
             <Alert variant="destructive" className="bg-destructive/10 border-destructive/30">
               <AlertTriangle className="h-4 w-4 !text-destructive" />
               <AlertTitle className="text-destructive">Important Disclaimer</AlertTitle>
@@ -94,25 +124,62 @@ export default function SymptomCheckerPage() {
       )}
 
       {result && (
-        <Card className="shadow-lg">
+        <Card className="shadow-lg mt-6">
           <CardHeader>
             <CardTitle className="text-xl font-semibold">Symptom Analysis Results</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div>
-              <h3 className="text-lg font-medium flex items-center mb-2">
-                <Lightbulb className="h-5 w-5 mr-2 text-primary" />
-                Potential Diagnostic Suggestions
-              </h3>
-              <p className="text-muted-foreground whitespace-pre-wrap">{result.diagnosticSuggestions}</p>
-            </div>
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-medium flex items-center mb-2">
-                <CheckCircle2 className="h-5 w-5 mr-2 text-green-600" />
-                Triage Recommendations
-              </h3>
-              <p className="text-muted-foreground whitespace-pre-wrap">{result.triageRecommendations}</p>
-            </div>
+            {result.possibleConditions && result.possibleConditions.length > 0 && (
+              <div>
+                <h3 className="text-lg font-medium flex items-center mb-2">
+                  <Lightbulb className="h-5 w-5 mr-2 text-primary" />
+                  Potential Conditions & Suggestions
+                </h3>
+                <Accordion type="single" collapsible className="w-full">
+                  {result.possibleConditions.map((condition, index) => (
+                    <AccordionItem value={`item-${index}`} key={index}>
+                      <AccordionTrigger className="text-base hover:no-underline">
+                        {condition.conditionName || `Suggestion ${index + 1}`}
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-3 pl-2 text-sm">
+                        <div>
+                          <h4 className="font-semibold flex items-center mb-1"><Apple className="h-4 w-4 mr-1.5 text-green-600" /> Related Diet Suggestions:</h4>
+                          <p className="text-muted-foreground whitespace-pre-wrap">{condition.relatedDietSuggestions}</p>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold flex items-center mb-1"><Bike className="h-4 w-4 mr-1.5 text-blue-600" /> Recommended Lifestyle Changes:</h4>
+                          <p className="text-muted-foreground whitespace-pre-wrap">{condition.recommendedLifestyleChanges}</p>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold flex items-center mb-1"><Pill className="h-4 w-4 mr-1.5 text-red-600" /> Possible Medications:</h4>
+                          <p className="text-muted-foreground whitespace-pre-wrap">{condition.possibleMedications}</p>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            )}
+            
+            {result.triageRecommendations && (
+              <div className="border-t pt-6">
+                <h3 className="text-lg font-medium flex items-center mb-2">
+                  <CheckCircle2 className="h-5 w-5 mr-2 text-green-600" />
+                  Triage Recommendations
+                </h3>
+                <p className="text-muted-foreground whitespace-pre-wrap">{result.triageRecommendations}</p>
+              </div>
+            )}
+
+            {result.overallDisclaimer && (
+                 <Alert variant="destructive" className="mt-4 bg-destructive/10 border-destructive/30">
+                    <AlertTriangle className="h-4 w-4 !text-destructive" />
+                    <AlertTitle className="text-destructive">Overall Disclaimer</AlertTitle>
+                    <AlertDescription className="text-destructive/80 whitespace-pre-wrap">
+                        {result.overallDisclaimer}
+                    </AlertDescription>
+                </Alert>
+            )}
           </CardContent>
         </Card>
       )}

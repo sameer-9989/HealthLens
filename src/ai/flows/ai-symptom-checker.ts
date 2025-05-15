@@ -13,12 +13,22 @@ import {z} from 'genkit';
 
 const SymptomCheckerInputSchema = z.object({
   symptoms: z.string().describe('The symptoms that the user is experiencing.'),
+  language: z.string().optional().describe("Target language for the response, e.g., 'es', 'fr'. Default is English."),
+  culture: z.string().optional().describe("Cultural context for tailoring explanations, e.g., 'Hispanic', 'South Asian'.")
 });
 export type SymptomCheckerInput = z.infer<typeof SymptomCheckerInputSchema>;
 
+const PossibleConditionSchema = z.object({
+  conditionName: z.string().describe('The name of the possible condition.'),
+  relatedDietSuggestions: z.string().describe('Dietary suggestions relevant to this condition.'),
+  recommendedLifestyleChanges: z.string().describe('Lifestyle changes recommended for this condition.'),
+  possibleMedications: z.string().describe('Possible over-the-counter or prescription medicines, with a clear disclaimer to consult a doctor.'),
+});
+
 const SymptomCheckerOutputSchema = z.object({
-  diagnosticSuggestions: z.string().describe('A list of possible diagnoses based on the symptoms.'),
-  triageRecommendations: z.string().describe('Recommendations for seeking medical care based on the symptoms.'),
+  possibleConditions: z.array(PossibleConditionSchema).describe('A list of possible diagnoses based on the symptoms, each with details.'),
+  triageRecommendations: z.string().describe('General recommendations for seeking medical care based on the symptoms.'),
+  overallDisclaimer: z.string().describe('A general disclaimer that this is not medical advice and a doctor should be consulted.')
 });
 export type SymptomCheckerOutput = z.infer<typeof SymptomCheckerOutputSchema>;
 
@@ -30,11 +40,34 @@ const prompt = ai.definePrompt({
   name: 'symptomCheckerPrompt',
   input: {schema: SymptomCheckerInputSchema},
   output: {schema: SymptomCheckerOutputSchema},
-  prompt: `You are an AI-powered symptom checker that provides diagnostic suggestions and triage recommendations based on the user's symptoms.
+  prompt: `You are an AI-powered symptom checker. Your goal is to provide informational suggestions based on user-reported symptoms.
+  THIS IS NOT MEDICAL ADVICE. ALWAYS ADVISE THE USER TO CONSULT A HEALTHCARE PROFESSIONAL FOR DIAGNOSIS AND TREATMENT.
 
-  Symptoms: {{{symptoms}}}
+  User Symptoms: {{{symptoms}}}
+  {{#if language}}Target Language: {{language}}{{/if}}
+  {{#if culture}}Cultural Context: {{culture}}{{/if}}
 
-  Provide a list of possible diagnoses and recommendations for seeking medical care.`,
+  Instructions:
+  1. Analyze the symptoms provided.
+  2. Identify several possible (but not definitive) conditions that might align with these symptoms.
+  3. For each possible condition, provide:
+     a. The Condition Name.
+     b. Related Diet Suggestions (e.g., "For [Condition Name], consider incorporating more hydrating fluids and bland foods like bananas or rice if stomach upset is present.").
+     c. Recommended Lifestyle Changes (e.g., "For [Condition Name], ensure adequate rest and avoid strenuous activities.").
+     d. Possible Medications (e.g., "Over-the-counter options like [example] might help with [symptom], or a doctor might prescribe [example]. ALWAYS consult a doctor before taking any medication.").
+  4. Provide general Triage Recommendations (e.g., "If symptoms worsen, or if you experience [severe symptom], seek medical attention immediately. For mild symptoms, monitor and consult a doctor if they persist.").
+  5. Conclude with an 'overallDisclaimer' that this tool does not provide medical advice and a healthcare professional must be consulted for any health concerns.
+  {{#if language}}
+  6. IMPORTANT: Provide the ENTIRE response (all fields in the output schema) in the specified '{{language}}'.
+  {{/if}}
+  {{#if culture}}
+  7. IMPORTANT: If a '{{culture}}' context is provided, try to make explanations and examples culturally relevant and sensitive if appropriate and possible for general conditions, without making harmful stereotypes. For example, food suggestions might generally align with common dietary patterns if known, or explanations might use analogies that are broadly understandable. This is a secondary consideration to accurate health information.
+  {{/if}}
+
+  Strictly follow the output JSON schema.
+  Provide at least 2-3 possible conditions if applicable, but not more than 5.
+  Ensure medication advice clearly states "consult a doctor".
+  `,
 });
 
 const symptomCheckerFlow = ai.defineFlow(
@@ -45,6 +78,16 @@ const symptomCheckerFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error("Symptom checker failed to produce an output.");
+    }
+     // Ensure disclaimer is always present
+    if (!output.overallDisclaimer || output.overallDisclaimer.trim() === "") {
+      output.overallDisclaimer = "This information is not medical advice. Always consult with a qualified healthcare professional for any health concerns or before making any decisions related to your health or treatment.";
+      if (input.language === "es") { // Basic example for Spanish
+        output.overallDisclaimer = "Esta información no es un consejo médico. Consulte siempre con un profesional de la salud calificado para cualquier preocupación de salud o antes de tomar cualquier decisión relacionada con su salud o tratamiento.";
+      }
+    }
+    return output;
   }
 );

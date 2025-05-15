@@ -1,8 +1,10 @@
+
 import type { LucideIcon } from 'lucide-react';
 import {
-  LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Library, UsersIcon, Settings,
-  FileText, Activity, Languages, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, ListChecks, Brain, Palette
-} from 'lucide-react'; // Changed some icons for better fit
+  LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Settings,
+  FileText, Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
+  PowerOff, Youtube as YoutubeIcon, Zap as StressIcon // Added PowerOff for Digital Detox, YoutubeIcon and StressIcon
+} from 'lucide-react';
 
 export interface NavItem {
   title: string;
@@ -25,110 +27,81 @@ export const mainNavItems: NavItem[] = [
     title: 'AI Symptom Checker', 
     href: '/symptom-checker', 
     icon: Stethoscope,
-    description: 'Get diagnostic suggestions for your symptoms.',
+    description: 'Get diagnostic suggestions for your symptoms. Includes multilingual & cultural sensitivity options.',
     color: "bg-teal-100 dark:bg-teal-900"
   },
   { 
     title: 'Virtual Assistant', 
     href: '/virtual-assistant', 
     icon: MessageCircleHeart,
-    description: 'Chat for medication reminders and health guidance.',
+    description: 'Chat for med info, term explanations, mindfulness, & health guidance.',
     color: "bg-blue-100 dark:bg-blue-900"
   },
   { 
     title: 'Self-Care Plans', 
     href: '/self-care-plans', 
     icon: BookHeart,
-    description: 'Access various plans for your well-being.',
+    description: 'AI-generated personalized plans for various conditions & goals.',
     color: "bg-green-100 dark:bg-green-900"
   },
-  { 
-    title: 'Health Literacy Coach', 
-    href: '/health-literacy-coach', 
-    icon: HelpCircle,
-    description: 'Understand medical terms in plain language.',
+  {
+    title: 'Stress Relief Yoga',
+    href: '/stress-relief-yoga',
+    icon: StressIcon, // Using Zap icon, consider a dedicated Yoga icon if available or custom
+    description: 'AI-suggested yoga types and example video routines for stress.',
+    color: "bg-orange-100 dark:bg-orange-900"
+  },
+  {
+    title: 'Digital Detox Tool',
+    href: '/digital-detox',
+    icon: PowerOff,
+    description: 'Guidance and tools for managing screen time and digital wellness.',
     color: "bg-purple-100 dark:bg-purple-900"
-  },
-  { 
-    title: 'Digital Therapeutics', 
-    href: '/therapeutics-library', 
-    icon: Library,
-    description: 'Interactive exercises for mental wellness.',
-    color: "bg-indigo-100 dark:bg-indigo-900"
-  },
-  { 
-    title: 'Care Coordination', 
-    href: '/care-coordination', 
-    icon: UsersIcon,
-    description: 'Organize notes for doctor visits and summarize outcomes.',
-    color: "bg-pink-100 dark:bg-pink-900"
-  },
-  { 
-    title: 'Routine Builder', 
-    href: '/routine-builder', 
-    icon: ListChecks,
-    description: 'Create personalized daily health checklists.',
-    color: "bg-yellow-100 dark:bg-yellow-900"
   },
   { 
     title: 'Symptom Timeline', 
     href: '/symptom-timeline', 
     icon: Activity,
-    description: 'Track your symptom progression over time.',
+    description: 'Manually log and analyze your symptom progression over time.',
     color: "bg-red-100 dark:bg-red-900"
-  },
-  { 
-    title: 'Multilingual Companion', 
-    href: '/multilingual-companion', 
-    icon: Languages,
-    description: 'Culturally sensitive health guidance in multiple languages.',
-    color: "bg-orange-100 dark:bg-orange-900"
-  },
-  { 
-    title: 'Conversational Coach', 
-    href: '/health-coach', 
-    icon: BotMessageSquare,
-    description: 'Personalized habit-building conversations.',
-    color: "bg-cyan-100 dark:bg-cyan-900"
   },
   { 
     title: 'Cognitive Tracker', 
     href: '/cognitive-tracker', 
     icon: Brain,
-    description: 'Daily prompts to assess cognitive functions.',
+    description: 'Daily prompts to assess cognitive functions and emotional wellness.',
     color: "bg-lime-100 dark:bg-lime-900"
   },
   { 
     title: 'Journal Synthesizer', 
     href: '/journal-synthesizer', 
     icon: FileText,
-    description: 'Convert journal entries into medical summaries.',
+    description: 'Convert journal entries into medical summaries (Placeholder).',
     color: "bg-fuchsia-100 dark:bg-fuchsia-900"
   },
   { 
     title: 'Mental Health Check-In', 
     href: '/mental-health-checkin', 
     icon: UserCheck,
-    description: 'Emotionally intelligent mental health support.',
+    description: 'Emotionally intelligent mental health support (Placeholder).',
     color: "bg-rose-100 dark:bg-rose-900"
   },
   { 
     title: 'Question Formulator', 
     href: '/question-formulator', 
-    icon: HelpCircle, // Can be same as literacy coach, or find another
-    description: 'Formulate questions for your doctor visits.',
+    icon: HelpCircle,
+    description: 'Formulate questions for your doctor visits (Placeholder).',
     color: "bg-violet-100 dark:bg-violet-900"
   },
   { 
     title: 'Emergency Info', 
     href: '/emergency-info', 
     icon: ShieldAlert,
-    description: 'Create a downloadable emergency information sheet.',
+    description: 'Create a downloadable emergency information sheet (Placeholder).',
     color: "bg-amber-100 dark:bg-amber-900"
   },
 ];
 
 export const secondaryNavItems: NavItem[] = [
   { title: 'Settings', href: '/settings', icon: Settings },
-  // { title: 'Theme', href: '/theme-editor', icon: Palette } // Example for a theme editor page
 ];

@@ -9,12 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, ArrowRight, Zap, Leaf, Smile, Moon, Sun, Sparkles, Palette, ListChecks, ShieldIcon } from "lucide-react";
+import { Loader2, AlertTriangle, ArrowRight, Zap, Leaf, Moon, Sparkles, Palette, ListChecks, ShieldIcon, YoutubeIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 interface StaticSelfCarePlan {
   id: string;
@@ -23,34 +24,37 @@ interface StaticSelfCarePlan {
   category: string;
   icon: React.ElementType;
   imageHint: string;
-  detailsLink?: string;
+  detailsLink?: string; // Link to a pre-defined content page or section
+  youtubeVideoId?: string; // For embedding a YouTube video
 }
 
 const staticSelfCarePlans: StaticSelfCarePlan[] = [
   {
     id: "mindfulness-meditation",
-    title: "Mindfulness Meditation",
-    description: "Reduce stress and improve focus with guided mindfulness exercises. Suitable for all levels.",
+    title: "Beginner Mindfulness Meditation",
+    description: "Reduce stress and improve focus with a simple guided mindfulness exercise. Suitable for all levels.",
     category: "Mental Wellness",
     icon: Leaf,
     imageHint: "meditation nature",
-    detailsLink: "/self-care-plans/mindfulness" // This could link to a page with pre-defined content or an app feature
+    youtubeVideoId: "inpok4MKVLM" // Example: Headspace 1-min meditation
   },
   {
-    id: "stress-relief-yoga",
-    title: "Stress Relief Yoga Snippets",
-    description: "Gentle yoga pose descriptions and breathing techniques to calm your mind and body, doable at your desk.",
+    id: "desk-stretches",
+    title: "Quick Desk Stretches",
+    description: "Relieve tension from sitting with these easy stretches you can do at your desk.",
     category: "Physical Activity",
     icon: Zap,
-    imageHint: "yoga peaceful",
+    imageHint: "office stretching",
+    youtubeVideoId: "tAUf7a νοDM" // Example: 5 Min Office Stretch
   },
   {
-    id: "digital-detox-challenge",
-    title: "Digital Detox Ideas",
-    description: "Tips to take a break from screens to reconnect with yourself and the world around you.",
+    id: "digital-detox-evening",
+    title: "Evening Digital Detox",
+    description: "Tips to disconnect from screens before bed for better sleep and a calmer mind.",
     category: "Lifestyle",
     icon: Moon,
-    imageHint: "nature no-phone",
+    imageHint: "calm bedroom no-phone",
+    detailsLink: "/digital-detox" 
   },
 ];
 
@@ -105,7 +109,7 @@ export default function SelfCarePlansPage() {
               <Label htmlFor="userConditionOrGoal">What's your main condition or goal?</Label>
               <Input
                 id="userConditionOrGoal"
-                placeholder="e.g., manage a common cold, improve sleep, reduce stress"
+                placeholder="e.g., manage common cold, improve sleep, reduce stress, diabetes management"
                 {...register("userConditionOrGoal")}
                 className="mt-1"
               />
@@ -124,7 +128,7 @@ export default function SelfCarePlansPage() {
               <Label htmlFor="relevantHabits">Any relevant habits or context? (Optional)</Label>
               <Textarea
                 id="relevantHabits"
-                placeholder="e.g., I sit at a desk all day, I often forget to drink water"
+                placeholder="e.g., I sit at a desk all day, I often forget to drink water, I eat lots of processed food"
                 {...register("relevantHabits")}
                 className="mt-1 min-h-[60px]"
               />
@@ -175,22 +179,39 @@ export default function SelfCarePlansPage() {
             <CardDescription>{generatedPlan.planIntroduction}</CardDescription>
             <CardDescription><strong>Suggested Duration:</strong> {generatedPlan.planDurationSuggestion}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {generatedPlan.steps.map((step, index) => (
-              <div key={index} className="p-3 border rounded-md bg-muted/30">
-                <h4 className="font-semibold">{step.stepTitle}</h4>
-                <p className="text-sm text-muted-foreground">{step.stepDescription}</p>
-                {step.frequencyOrTiming && <p className="text-xs text-primary mt-1">Timing: {step.frequencyOrTiming}</p>}
-              </div>
-            ))}
-            <Alert variant="default" className="bg-accent/10 border-accent/30">
+          <CardContent className="space-y-3">
+            <Accordion type="single" collapsible className="w-full">
+              {generatedPlan.steps.map((step, index) => (
+                <AccordionItem value={`step-${index}`} key={index}>
+                  <AccordionTrigger className="text-base hover:no-underline">
+                     {step.stepTitle} ({step.stepType})
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-2 pl-2 text-sm">
+                    <p className="text-muted-foreground whitespace-pre-wrap">{step.stepDescription}</p>
+                    {step.frequencyOrTiming && <p className="text-xs text-primary mt-1"><strong>Timing/Frequency:</strong> {step.frequencyOrTiming}</p>}
+                    {/* Placeholder for potential YouTube video embed based on step type */}
+                    {(step.stepType === 'exercise' && (step.stepDescription.toLowerCase().includes('stretch') || step.stepDescription.toLowerCase().includes('yoga'))) && (
+                       <div className="mt-2 p-2 border rounded-md bg-muted/50">
+                          <p className="text-xs text-muted-foreground italic flex items-center">
+                            <YoutubeIcon className="h-4 w-4 mr-1.5 text-red-600" />
+                            Consider searching YouTube for "[relevant exercise term from stepTitle]" for visual guidance.
+                          </p>
+                          {/* Example: <iframe width="100%" height="200" src="https://www.youtube.com/embed/VIDEO_ID" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
+                       </div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+            
+            <Alert variant="default" className="bg-accent/10 border-accent/30 mt-4">
                <Sparkles className="h-4 w-4 text-accent" />
               <AlertTitle className="text-accent-foreground">Motivational Tip</AlertTitle>
               <AlertDescription className="text-accent-foreground/80">
                 {generatedPlan.motivationalTip}
               </AlertDescription>
             </Alert>
-             <Alert variant="destructive">
+             <Alert variant="destructive" className="mt-4">
               <ShieldIcon className="h-4 w-4" />
               <AlertTitle>Important Disclaimer</AlertTitle>
               <AlertDescription>
@@ -203,9 +224,9 @@ export default function SelfCarePlansPage() {
 
       <Card className="shadow-lg mt-12">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Browse Self-Care Ideas</CardTitle>
+          <CardTitle className="text-2xl font-bold">Browse Self-Care Ideas & Exercises</CardTitle>
           <CardDescription>
-            Discover a variety of pre-defined plans and ideas to support your well-being.
+            Discover a variety of pre-defined ideas and guided exercises to support your well-being.
           </CardDescription>
         </CardHeader>
       </Card>
@@ -220,29 +241,46 @@ export default function SelfCarePlansPage() {
               </div>
               <CardDescription className="text-sm text-muted-foreground">{plan.category}</CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow">
+            <CardContent className="flex-grow space-y-3">
                <Image 
                 src={`https://placehold.co/400x250.png`} 
                 alt={plan.title} 
                 width={400} 
                 height={250} 
-                className="rounded-md mb-4 object-cover w-full h-40"
+                className="rounded-md mb-2 object-cover w-full h-40"
                 data-ai-hint={plan.imageHint}
               />
-              <p className="text-muted-foreground">{plan.description}</p>
+              <p className="text-muted-foreground text-sm">{plan.description}</p>
+              {plan.youtubeVideoId && (
+                <div className="mt-2">
+                   <Label className="text-xs text-muted-foreground">Quick Video Guide:</Label>
+                   {/* Basic YouTube embed placeholder. In a real app, use a proper embed component or next/third-parties */}
+                   <div className="aspect-video bg-muted rounded-md flex items-center justify-center mt-1">
+                     <a 
+                        href={`https://www.youtube.com/watch?v=${plan.youtubeVideoId}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-primary hover:underline flex items-center"
+                      >
+                       <YoutubeIcon className="h-6 w-6 mr-2 text-red-600"/> Watch on YouTube
+                     </a>
+                   </div>
+                   {/* <iframe width="100%" height="auto" className="aspect-video rounded-md" src={`https://www.youtube.com/embed/${plan.youtubeVideoId}`} title={plan.title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
+                </div>
+              )}
             </CardContent>
             <CardFooter>
               {plan.detailsLink ? (
                 <Button asChild variant="default" className="w-full">
                   <Link href={plan.detailsLink}>
-                    View Details <ArrowRight className="ml-2 h-4 w-4" />
+                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-              ) : (
+              ) : !plan.youtubeVideoId ? (
                  <Button variant="secondary" className="w-full" disabled>
                     More Info Soon
                   </Button>
-              )}
+              ) : null }
             </CardFooter>
           </Card>
         ))}

@@ -1,12 +1,19 @@
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
-import { ArrowRight, ListChecks, Activity } from "lucide-react"; // Added ListChecks and Activity
+import { ArrowRight, ListChecks, Activity, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 export default function DashboardPage() {
-  const featuredItems = mainNavItems.filter(item => item.href !== '/').slice(0, 6); // Show 6 features
+  // Filter out the dashboard itself and take a few features for quick access
+  const featuredItems = mainNavItems.filter(item => item.href !== '/').slice(0, 5); 
+  // Specific items for "Your Health Journey" section
+  const selfCarePlanItem = mainNavItems.find(item => item.href === '/self-care-plans');
+  const symptomTimelineItem = mainNavItems.find(item => item.href === '/symptom-timeline');
+  const stressReliefYogaItem = mainNavItems.find(item => item.href === '/stress-relief-yoga');
+
 
   return (
     <div className="space-y-8">
@@ -14,17 +21,17 @@ export default function DashboardPage() {
         <CardHeader className="pb-4">
           <CardTitle className="text-3xl font-bold">Welcome to HealthLens!</CardTitle>
           <CardDescription className="text-lg text-muted-foreground">
-            Your personal health companion. Explore tools to manage your well-being.
+            Your personal AI-powered health companion. Explore tools to manage your well-being.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-2 gap-6 items-center">
             <div>
               <p className="mb-4">
-                HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, manage your health routines, and communicate effectively with healthcare providers.
+                HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, create self-care plans, manage stress, and interact with a virtual health assistant.
               </p>
               <p>
-                Navigate through the sidebar to access features like the AI Symptom Checker, Virtual Nursing Assistant, Self-Care Plans, and more.
+                Navigate through the sidebar to access all available features.
               </p>
               <Button asChild className="mt-6">
                 <Link href="/symptom-checker">
@@ -35,11 +42,11 @@ export default function DashboardPage() {
             <div className="hidden md:block">
               <Image 
                 src="https://placehold.co/600x400.png" 
-                alt="Healthcare illustration" 
+                alt="Healthcare technology illustration" 
                 width={600} 
                 height={400} 
                 className="rounded-lg shadow-md"
-                data-ai-hint="health technology" 
+                data-ai-hint="health technology app" 
               />
             </div>
           </div>
@@ -77,29 +84,46 @@ export default function DashboardPage() {
           <CardTitle>Your Health Journey</CardTitle>
           <CardDescription>Stay on top of your health goals and routines.</CardDescription>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-6">
-            <Link href="/routine-builder" className="block hover:no-underline">
-                 <Card className="hover:bg-accent/50 transition-colors">
-                    <CardHeader className="flex flex-row items-center gap-4">
-                        <ListChecks className="h-8 w-8 text-primary" />
-                        <div>
-                            <CardTitle>Routine Builder</CardTitle>
-                            <CardDescription>Manage your daily health tasks.</CardDescription>
-                        </div>
-                    </CardHeader>
-                 </Card>
-            </Link>
-            <Link href="/symptom-timeline" className="block hover:no-underline">
-                 <Card className="hover:bg-accent/50 transition-colors">
-                    <CardHeader className="flex flex-row items-center gap-4">
-                        <Activity className="h-8 w-8 text-primary" />
-                        <div>
-                            <CardTitle>Symptom Timeline</CardTitle>
-                            <CardDescription>Track and visualize your symptoms.</CardDescription>
-                        </div>
-                    </CardHeader>
-                 </Card>
-            </Link>
+        <CardContent className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {selfCarePlanItem && (
+              <Link href={selfCarePlanItem.href} className="block hover:no-underline">
+                   <Card className="hover:bg-accent/50 transition-colors h-full">
+                      <CardHeader className="flex flex-row items-center gap-4">
+                          <ListChecks className="h-8 w-8 text-primary" />
+                          <div>
+                              <CardTitle>{selfCarePlanItem.title}</CardTitle>
+                              <CardDescription>{selfCarePlanItem.description || "Create personalized self-care strategies."}</CardDescription>
+                          </div>
+                      </CardHeader>
+                   </Card>
+              </Link>
+            )}
+            {symptomTimelineItem && (
+              <Link href={symptomTimelineItem.href} className="block hover:no-underline">
+                   <Card className="hover:bg-accent/50 transition-colors h-full">
+                      <CardHeader className="flex flex-row items-center gap-4">
+                          <Activity className="h-8 w-8 text-primary" />
+                          <div>
+                              <CardTitle>{symptomTimelineItem.title}</CardTitle>
+                              <CardDescription>{symptomTimelineItem.description || "Track and visualize your symptoms."}</CardDescription>
+                          </div>
+                      </CardHeader>
+                   </Card>
+              </Link>
+            )}
+            {stressReliefYogaItem && (
+              <Link href={stressReliefYogaItem.href} className="block hover:no-underline">
+                   <Card className="hover:bg-accent/50 transition-colors h-full">
+                      <CardHeader className="flex flex-row items-center gap-4">
+                          <Youtube className="h-8 w-8 text-primary" /> {/* Assuming Youtube icon for yoga videos */}
+                          <div>
+                              <CardTitle>{stressReliefYogaItem.title}</CardTitle>
+                              <CardDescription>{stressReliefYogaItem.description || "Find yoga routines for stress."}</CardDescription>
+                          </div>
+                      </CardHeader>
+                   </Card>
+              </Link>
+            )}
         </CardContent>
       </Card>
     </div>
