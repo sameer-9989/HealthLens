@@ -4,7 +4,7 @@ import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
 import { ArrowRight, ListChecks, Activity, YoutubeIcon, Building } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+// Image import removed as it's no longer used in this file.
 
 export default function DashboardPage() {
   const featuredItems = mainNavItems.filter(item => item.href !== '/').slice(0, 3); // Show top 3 features
@@ -17,15 +17,8 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <Card className="shadow-xl overflow-hidden">
         <CardHeader className="pb-6 text-center bg-gradient-to-br from-primary/80 via-primary/70 to-accent/60 dark:from-primary/50 dark:via-primary/40 dark:to-accent/40 p-8 md:p-12">
-          <Image
-            src="https://storage.googleapis.com/project-anvil-bucket/studio-assets%2Fhealth-lens-dashboard-hero.png_1715098829503"
-            alt="Health Lens App - Your guide to better health, featuring an AI assistant, symptom checker, self-care plans, and more, with a friendly doctor illustration."
-            width={480}
-            height={480}
-            className="w-full max-w-[480px] mx-auto h-auto object-contain rounded-lg mb-6"
-            priority
-          />
-          <CardTitle className="text-3xl md:text-4xl font-bold text-primary-foreground drop-shadow-sm">
+          {/* Image component removed from here */}
+          <CardTitle className="text-3xl md:text-4xl font-bold text-primary-foreground drop-shadow-sm mt-4 md:mt-0">
             Welcome to Your Intelligent Health Companion
           </CardTitle>
           <CardDescription className="text-lg md:text-xl text-primary-foreground/90 mt-2 drop-shadow-sm">
