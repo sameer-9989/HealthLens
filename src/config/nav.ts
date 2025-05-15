@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Settings,
   FileText, Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
-  PowerOff, Youtube as YoutubeIcon, Zap as StressIcon // Added PowerOff for Digital Detox, YoutubeIcon and StressIcon
+  PowerOff, Youtube as YoutubeIcon, Zap as StressIcon, Image as ImageIcon // Added ImageIcon
 } from 'lucide-react';
 
 export interface NavItem {
@@ -47,7 +47,7 @@ export const mainNavItems: NavItem[] = [
   {
     title: 'Stress Relief Yoga',
     href: '/stress-relief-yoga',
-    icon: StressIcon, // Using Zap icon, consider a dedicated Yoga icon if available or custom
+    icon: StressIcon, 
     description: 'AI-suggested yoga types and example video routines for stress.',
     color: "bg-orange-100 dark:bg-orange-900"
   },
@@ -71,6 +71,13 @@ export const mainNavItems: NavItem[] = [
     icon: Brain,
     description: 'Daily prompts to assess cognitive functions and emotional wellness.',
     color: "bg-lime-100 dark:bg-lime-900"
+  },
+   {
+    title: 'AI Image Gallery',
+    href: '/ai-image-gallery',
+    icon: ImageIcon,
+    description: 'Generate & browse AI-created images for health topics.',
+    color: "bg-indigo-100 dark:bg-indigo-900"
   },
   { 
     title: 'Journal Synthesizer', 
