@@ -3,7 +3,7 @@ import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Settings,
   FileText, Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
-  PowerOff, Youtube as YoutubeIcon, Zap as StressIcon, Image as ImageIcon,
+  PowerOff, YoutubeIcon, Zap as StressIcon, Image as ImageIcon,
   Lightbulb, GitCompareArrows, Wind, AnatomicalHeart, Users
 } from 'lucide-react';
 
@@ -59,13 +59,13 @@ export const mainNavItems: NavItem[] = [
     description: 'Guidance and tools for managing screen time and digital wellness.',
     color: "bg-purple-100 dark:bg-purple-900"
   },
-  { 
-    title: 'Symptom Timeline', 
-    href: '/symptom-timeline', 
-    icon: Activity,
-    description: 'Manually log and analyze your symptom progression over time.',
-    color: "bg-red-100 dark:bg-red-900"
-  },
+  // { 
+  //   title: 'Symptom Timeline', 
+  //   href: '/symptom-timeline', 
+  //   icon: Activity,
+  //   description: 'Manually log and analyze your symptom progression over time.',
+  //   color: "bg-red-100 dark:bg-red-900"
+  // },
   { 
     title: 'Cognitive Tracker', 
     href: '/cognitive-tracker', 
@@ -101,14 +101,6 @@ export const mainNavItems: NavItem[] = [
     description: 'Learn about body parts, common issues, and care.',
     color: "bg-pink-100 dark:bg-pink-900"
   },
-  // { 
-  //   title: 'AI Image Gallery', 
-  //   href: '/ai-image-gallery', 
-  //   icon: ImageIcon,
-  //   description: 'View and manage AI-generated images (Feature Removed).',
-  //   color: "bg-gray-100 dark:bg-gray-700",
-  //   disabled: true,
-  // },
   { 
     title: 'Journal Synthesizer', 
     href: '/journal-synthesizer', 
@@ -142,4 +134,3 @@ export const mainNavItems: NavItem[] = [
 export const secondaryNavItems: NavItem[] = [
   { title: 'Settings', href: '/settings', icon: Settings },
 ];
-
