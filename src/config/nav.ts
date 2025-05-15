@@ -94,26 +94,12 @@ export const mainNavItems: NavItem[] = [
     description: 'Learn about body parts, common issues, and care.',
     color: "bg-pink-100 dark:bg-pink-900"
   },
-  // { 
-  //   title: 'Journal Synthesizer', 
-  //   href: '/journal-synthesizer', 
-  //   icon: FileText, // Icon was FileText
-  //   description: 'Convert journal entries into medical summaries (Placeholder).',
-  //   color: "bg-fuchsia-100 dark:bg-fuchsia-900"
-  // },
   { 
     title: 'Mental Health Check-In', 
     href: '/mental-health-checkin', 
     icon: UserCheck,
     description: 'Emotionally intelligent mental health support (Placeholder).',
     color: "bg-rose-100 dark:bg-rose-900"
-  },
-  { 
-    title: 'Question Formulator', 
-    href: '/question-formulator', 
-    icon: HelpCircle,
-    description: 'Formulate questions for your doctor visits (Placeholder).',
-    color: "bg-violet-100 dark:bg-violet-900"
   },
   { 
     title: 'Emergency Info', 
