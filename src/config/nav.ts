@@ -88,34 +88,28 @@ export const mainNavItems: NavItem[] = [
     description: 'Access guided breathing, nature sounds, and meditations.',
     color: "bg-cyan-100 dark:bg-cyan-900"
   },
-  {
-    title: 'Body Scan Visualizer',
-    href: '/body-scan-visualizer',
-    icon: Users, // Consider AnatomicalHeart if more specific
-    description: 'Learn about body parts, common issues, and care.',
-    color: "bg-pink-100 dark:bg-pink-900"
-  },
-  // Standalone Mental Health Check-in removed, functionality merged to Virtual Assistant
   // {
-  //   title: 'Mental Health Check-In',
-  //   href: '/mental-health-checkin',
-  //   icon: UserCheck,
-  //   description: 'Emotionally intelligent mental health support.',
-  //   color: "bg-rose-100 dark:bg-rose-900"
+  //   title: 'Body Scan Visualizer',
+  //   href: '/body-scan-visualizer',
+  //   icon: Users, // Consider AnatomicalHeart if more specific
+  //   description: 'Learn about body parts, common issues, and care.',
+  //   color: "bg-pink-100 dark:bg-pink-900"
   // },
 ];
 
 // Features that were removed or merged, showing their original icons for reference if needed
 const removedFeaturePlaceholders: NavItem[] = [
     { title: 'Health Literacy Coach', href: '/health-literacy-coach', icon: HelpCircle, description: "Merged into Virtual Assistant." },
-    { title: 'Therapeutics Library', href: '/therapeutics-library', icon: Palette, description: "Merged into Virtual Assistant." }, // Palette was an example
+    { title: 'Therapeutics Library', href: '/therapeutics-library', icon: Palette, description: "Merged into Virtual Assistant." },
     { title: 'Care Coordination', href: '/care-coordination', icon: Users /* or another icon like FileText */, description: "Removed." },
     { title: 'Routine Builder', href: '/routine-builder', icon: ListChecks, description: "Streamlined into Self-Care Plans." },
     { title: 'Multilingual Companion', href: '/multilingual-companion', icon: BotMessageSquare, description: "Merged into Symptom Checker." },
     { title: 'Symptom Timeline', href: '/symptom-timeline', icon: Activity, description: "Removed."},
     { title: 'Journal Synthesizer', href: '/journal-synthesizer', icon: FileText, description: "Removed."},
     { title: 'Question Formulator', href: '/question-formulator', icon: HelpCircle, description: "Removed."},
-    { title: 'Emergency Info', href: '/emergency-info', icon: ShieldAlert, description: "Removed."}
+    { title: 'Emergency Info', href: '/emergency-info', icon: ShieldAlert, description: "Removed."},
+    { title: 'Mental Health Check-In', href: '/mental-health-checkin', icon: UserCheck, description: "Merged into Virtual Assistant." },
+    { title: 'Body Scan Visualizer', href: '/body-scan-visualizer', icon: Users, description: "Removed." }
 ];
 
 
@@ -123,3 +117,4 @@ export const secondaryNavItems: NavItem[] = [
   { title: 'Settings', href: '/settings', icon: Settings },
   // { title: 'Help & FAQ', href: '/help', icon: HelpCircle }, // Example, if added
 ];
+

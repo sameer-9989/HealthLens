@@ -11,7 +11,7 @@ import '@/ai/flows/cognitive-health-tracker.ts';
 // New AI Features from this request
 import '@/ai/flows/ai-health-myth-buster.ts';
 import '@/ai/flows/ai-habit-conflict-detector.ts';
-import '@/ai/flows/ai-body-scan-visualizer.ts';
+// import '@/ai/flows/ai-body-scan-visualizer.ts'; // Removed
 
 
 // Other Existing/Future AI Features
@@ -39,3 +39,4 @@ import '@/ai/flows/conversational-health-coach.ts';
 // import '@/ai/flows/symptom-journal-synthesizer.ts'; // Removed
 // import '@/ai/flows/health-question-auto-formulator.ts'; // Removed
 // import '@/ai/flows/mental-health-check-in-companion.ts'; // Merged into VA
+
