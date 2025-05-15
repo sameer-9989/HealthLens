@@ -128,11 +128,11 @@ export default function StressReliefYogaPage() {
                       <div className="relative aspect-video bg-muted">
                          <Image 
                             src={`https://placehold.co/320x180.png`} 
-                            alt={`Thumbnail for ${routine.title}`}
+                            alt={`Visual hint for ${routine.title}`}
                             width={320} 
                             height={180} 
                             className="rounded-t-md object-cover w-full h-full"
-                            data-ai-hint={`${routine.category.toLowerCase()} yoga ${routine.title.toLowerCase().split(" ").slice(0,2).join(" ")}`}
+                            data-ai-hint={`${routine.category.toLowerCase().replace(/\s/g, '-')} ${routine.title.toLowerCase().split(" ").slice(0,2).join(" ")} yoga`}
                         />
                       </div>
                       <CardContent className="p-4 flex-grow flex flex-col">
@@ -178,5 +178,3 @@ export default function StressReliefYogaPage() {
     </div>
   );
 }
-
-    

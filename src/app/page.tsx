@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
-import { ArrowRight, ListChecks, Activity, YoutubeIcon } from "lucide-react"; // Corrected Youtube to YoutubeIcon if it's an alias
+import { ArrowRight, ListChecks, Activity, YoutubeIcon } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -42,11 +42,11 @@ export default function DashboardPage() {
             <div className="mt-6 md:mt-0 flex justify-center items-center">
               <Image
                 src="https://placehold.co/600x400.png"
-                alt="Abstract health and wellness graphic"
+                alt="Abstract illustration representing digital health and wellness"
                 width={600}
                 height={400}
                 className="rounded-lg shadow-md object-cover"
-                data-ai-hint="abstract health"
+                data-ai-hint="digital health wellbeing technology"
                 priority 
               />
             </div>

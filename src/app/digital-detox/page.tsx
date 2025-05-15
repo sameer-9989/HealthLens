@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, Sparkles, PowerOff, BookOpen, Activity, LightbulbIcon, Image as ImageIcon } from "lucide-react";
+import { Loader2, AlertTriangle, Sparkles, PowerOff, BookOpen, Activity, LightbulbIcon, Image as ImageIconLucide } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -113,21 +113,20 @@ export default function DigitalDetoxPage() {
           <CardContent className="space-y-6">
             
             <div className="space-y-3">
-                <h3 className="font-semibold text-lg flex items-center"><ImageIcon className="h-5 w-5 mr-2 text-primary" /> Screen Time Insights</h3>
-                {/* Placeholder for infographic/images */}
+                <h3 className="font-semibold text-lg flex items-center"><ImageIconLucide className="h-5 w-5 mr-2 text-primary" /> Screen Time Insights</h3>
                 <div className="p-4 border rounded-md bg-muted/30">
-                    <p className="text-sm text-muted-foreground italic mb-2">Visualize the impact: Imagine a calming image here representing balance, or a simple infographic about screen time effects.</p>
+                    <p className="text-sm text-muted-foreground italic mb-2">Visualize the impact: Below is a conceptual image representing digital balance.</p>
                      <Image 
                         src="https://placehold.co/600x300.png" 
-                        alt="Digital wellness concept" 
+                        alt="Digital wellness concept - balance between technology and nature" 
                         width={600} 
                         height={300} 
                         className="rounded-md shadow-sm object-cover w-full"
-                        data-ai-hint="digital wellbeing nature" 
+                        data-ai-hint="digital wellbeing nature balance" 
                     />
                 </div>
                 {guidance.screenTimeRisksGuide.map((item, index) => (
-                    <Card key={index} className="bg-background p-3">
+                    <Card key={index} className="bg-background p-3 shadow-sm">
                         <CardTitle className="text-md font-medium">{item.title}</CardTitle>
                         <CardDescription className="text-sm">{item.point}</CardDescription>
                     </Card>
@@ -146,7 +145,7 @@ export default function DigitalDetoxPage() {
             <div className="space-y-3">
               <h3 className="font-semibold text-lg flex items-center"><Activity className="h-5 w-5 mr-2 text-primary" /> Screen-Free Activity Challenges</h3>
               {guidance.activityChallenges.map((activity, index) => (
-                 <Card key={index} className="bg-background p-3">
+                 <Card key={index} className="bg-background p-3 shadow-sm">
                     <CardTitle className="text-md font-medium">{activity.title}</CardTitle>
                     <CardDescription className="text-sm">{activity.description}</CardDescription>
                 </Card>

@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, Lightbulb, CheckCircle2, Pill, Apple, Bike, LanguagesIcon, Globe, InfoIcon, Stethoscope } from 'lucide-react'; 
+import { Loader2, AlertTriangle, Lightbulb, CheckCircle2, Pill, Apple, Bike, LanguagesIcon, Globe, InfoIcon, Stethoscope, Image as ImageIconLucide } from 'lucide-react'; 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -49,12 +49,15 @@ export default function SymptomCheckerPage() {
 
   const getCategoryLabel = (category?: MedicineSuggestion['category']) => {
     if (!category || category === 'Unknown') return null;
-    const labels: Record<typeof category, string> = {
+    const labels: Record<Exclude<MedicineSuggestion['category'], undefined | 'Unknown'>, string> = {
       OTC: "Over-the-Counter",
       Prescription: "Prescription (Example)",
       NaturalRemedy: "Natural Remedy"
     };
-    return labels[category] || null;
+    if (category in labels) {
+        return labels[category as Exclude<MedicineSuggestion['category'], undefined | 'Unknown'>];
+    }
+    return null;
   }
 
   return (
@@ -157,6 +160,19 @@ export default function SymptomCheckerPage() {
                         {condition.conditionName || `Suggestion ${index + 1}`}
                       </AccordionTrigger>
                       <AccordionContent className="space-y-4 pt-3 pl-2 text-sm">
+                        <div className='my-3 p-3 bg-muted/30 rounded-md border'>
+                            <h4 className="font-semibold flex items-center mb-1 text-primary"><ImageIconLucide className="h-4 w-4 mr-1.5" /> Visual Context for {condition.conditionName}</h4>
+                            <Image 
+                                src={`https://placehold.co/400x200.png`}
+                                alt={`Illustrative image for ${condition.conditionName}`}
+                                width={400}
+                                height={200}
+                                className="rounded object-cover border bg-background w-full shadow-sm"
+                                data-ai-hint={`${condition.conditionName.toLowerCase()} illustration`}
+                            />
+                             <p className="text-xs text-muted-foreground mt-1">Placeholder image. In a full app, relevant medical illustrations would appear here.</p>
+                        </div>
+
                         <div>
                           <h4 className="font-semibold flex items-center mb-1"><Apple className="h-4 w-4 mr-1.5 text-green-600" /> Related Diet Suggestions:</h4>
                           <p className="text-muted-foreground whitespace-pre-wrap">{condition.relatedDietSuggestions}</p>
@@ -170,7 +186,7 @@ export default function SymptomCheckerPage() {
                             <h4 className="font-semibold flex items-center mb-2"><Pill className="h-4 w-4 mr-1.5 text-red-600" /> Possible Medicine Information:</h4>
                             <div className="space-y-3">
                               {condition.suggestedMedicines.map((med, medIndex) => (
-                                <Card key={medIndex} className="p-3 bg-muted/20 border">
+                                <Card key={medIndex} className="p-3 bg-background shadow-sm border">
                                   <CardHeader className="p-0 pb-2 mb-2">
                                       <CardTitle className="text-md flex items-center justify-between">
                                         {med.name}
@@ -187,7 +203,7 @@ export default function SymptomCheckerPage() {
                                         alt={`Placeholder for ${med.name}`}
                                         width={60}
                                         height={60}
-                                        className="rounded object-contain border bg-background"
+                                        className="rounded object-contain border bg-muted/20"
                                         data-ai-hint={med.imageUrlHint}
                                       />
                                       <div className="flex-1">
@@ -236,4 +252,3 @@ export default function SymptomCheckerPage() {
     </div>
   );
 }
-

@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, AlertTriangle, ArrowRight, Zap, Leaf, Moon, Sparkles, Palette, ListChecks, ShieldIcon, YoutubeIcon } from "lucide-react";
+import { Loader2, AlertTriangle, ArrowRight, Leaf, Moon, Sparkles, Palette, ListChecks, ShieldIcon, YoutubeIcon, Zap, Image as ImageIconLucide } from "lucide-react"; // Added Zap, ImageIconLucide
 import Link from "next/link";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -24,8 +24,8 @@ interface StaticSelfCarePlan {
   category: string;
   icon: React.ElementType;
   imageHint: string;
-  detailsLink?: string; // Link to a pre-defined content page or section
-  youtubeVideoId?: string; // For embedding a YouTube video
+  detailsLink?: string; 
+  youtubeVideoId?: string; 
 }
 
 const staticSelfCarePlans: StaticSelfCarePlan[] = [
@@ -36,7 +36,7 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     category: "Mental Wellness",
     icon: Leaf,
     imageHint: "meditation nature",
-    youtubeVideoId: "inpok4MKVLM" // Example: Headspace 1-min meditation
+    youtubeVideoId: "inpok4MKVLM" 
   },
   {
     id: "desk-stretches",
@@ -45,7 +45,7 @@ const staticSelfCarePlans: StaticSelfCarePlan[] = [
     category: "Physical Activity",
     icon: Zap,
     imageHint: "office stretching",
-    youtubeVideoId: "tAUf7a νοDM" // Example: 5 Min Office Stretch
+    youtubeVideoId: "tAUf7aVO0DM" // Corrected video ID example
   },
   {
     id: "digital-detox-evening",
@@ -187,16 +187,27 @@ export default function SelfCarePlansPage() {
                      {step.stepTitle} ({step.stepType})
                   </AccordionTrigger>
                   <AccordionContent className="space-y-2 pl-2 text-sm">
+                    {step.stepImageHint && (
+                        <div className="my-2 p-2 bg-muted/30 rounded-md border">
+                            <Image
+                                src={`https://placehold.co/300x180.png`}
+                                alt={`Visual hint for ${step.stepTitle}`}
+                                width={300}
+                                height={180}
+                                className="rounded object-cover border bg-background w-full shadow-sm mb-1"
+                                data-ai-hint={step.stepImageHint}
+                            />
+                            <p className="text-xs text-muted-foreground">Visual representation for: {step.stepImageHint}</p>
+                        </div>
+                    )}
                     <p className="text-muted-foreground whitespace-pre-wrap">{step.stepDescription}</p>
                     {step.frequencyOrTiming && <p className="text-xs text-primary mt-1"><strong>Timing/Frequency:</strong> {step.frequencyOrTiming}</p>}
-                    {/* Placeholder for potential YouTube video embed based on step type */}
                     {(step.stepType === 'exercise' && (step.stepDescription.toLowerCase().includes('stretch') || step.stepDescription.toLowerCase().includes('yoga'))) && (
                        <div className="mt-2 p-2 border rounded-md bg-muted/50">
                           <p className="text-xs text-muted-foreground italic flex items-center">
                             <YoutubeIcon className="h-4 w-4 mr-1.5 text-red-600" />
-                            Consider searching YouTube for "[relevant exercise term from stepTitle]" for visual guidance.
+                            Consider searching YouTube for "{step.stepTitle}" for visual guidance.
                           </p>
-                          {/* Example: <iframe width="100%" height="200" src="https://www.youtube.com/embed/VIDEO_ID" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
                        </div>
                     )}
                   </AccordionContent>
@@ -254,7 +265,6 @@ export default function SelfCarePlansPage() {
               {plan.youtubeVideoId && (
                 <div className="mt-2">
                    <Label className="text-xs text-muted-foreground">Quick Video Guide:</Label>
-                   {/* Basic YouTube embed placeholder. In a real app, use a proper embed component or next/third-parties */}
                    <div className="aspect-video bg-muted rounded-md flex items-center justify-center mt-1">
                      <a 
                         href={`https://www.youtube.com/watch?v=${plan.youtubeVideoId}`} 
@@ -265,7 +275,6 @@ export default function SelfCarePlansPage() {
                        <YoutubeIcon className="h-6 w-6 mr-2 text-red-600"/> Watch on YouTube
                      </a>
                    </div>
-                   {/* <iframe width="100%" height="auto" className="aspect-video rounded-md" src={`https://www.youtube.com/embed/${plan.youtubeVideoId}`} title={plan.title} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
                 </div>
               )}
             </CardContent>

@@ -23,7 +23,8 @@ const PlanStepSchema = z.object({
   stepTitle: z.string().describe("A concise title for the self-care step."),
   stepType: z.enum(['diet', 'exercise', 'mindfulness', 'behavioral', 'hydration', 'sleep', 'other']).describe("Category of the self-care step."),
   stepDescription: z.string().describe("A detailed explanation of the step, how to perform it, and its benefits. For exercises, describe simple movements. For diet, give specific food type examples or meal ideas. For mindfulness, provide textual guidance."),
-  frequencyOrTiming: z.string().optional().describe("Suggested frequency or timing, e.g., 'Daily', 'Morning and Evening', '3 times a day with meals', 'Before bed for 10 minutes'.")
+  frequencyOrTiming: z.string().optional().describe("Suggested frequency or timing, e.g., 'Daily', 'Morning and Evening', '3 times a day with meals', 'Before bed for 10 minutes'."),
+  stepImageHint: z.string().optional().describe("A 2-3 word hint for a relevant image for this step (e.g., 'person meditating', 'drinking water', 'healthy meal', 'gentle stretching').")
 });
 
 const GenerateSelfCarePlanOutputSchema = z.object({
@@ -60,6 +61,7 @@ Based on this information:
     *   'stepType' (diet, exercise, mindfulness, behavioral, hydration, sleep, other).
     *   'stepDescription' (DETAILED: For exercise, describe simple movements like stretches or bodyweight exercises that can be done at home without equipment. For diet, provide specific food type examples, simple meal ideas, or tips for healthier choices relevant to the condition/goal. For mindfulness, provide text-based guidance for a short routine. For behavioral, suggest concrete actions like setting reminders or journaling).
     *   'frequencyOrTiming' (e.g., 'Daily in the morning', '3 times a week for 20 minutes', 'After each meal').
+    *   'stepImageHint': A brief 2-3 word hint for a relevant placeholder image (e.g., "deep breathing", "person walking", "healthy salad", "journal writing", "sleeping peacefully").
     *   Ensure steps are purely software-based. Example for exercise: "Gentle Neck Stretches: 1. Sit or stand tall. 2. Slowly tilt your head to the right, feeling a stretch in the left side of your neck. Hold for 15-20 seconds. 3. Return to center. 4. Repeat on the left side. Do 3 repetitions per side."
     *   If {{userConditionOrGoal}} is "common cold," steps might include: hydration goals (e.g., "Drink 8 glasses of water/herbal tea"), rest reminders (e.g., "Aim for 8 hours of sleep"), simple food suggestions (e.g., "Eat a bowl of chicken soup or broth for its soothing properties").
     *   If {{userConditionOrGoal}} is "anxiety," steps might include: a daily mindfulness prompt (e.g., "5-minute Mindful Breathing: Focus on your breath, noticing the sensation of air entering and leaving your body. If your mind wanders, gently bring your attention back to your breath."), journaling (e.g., "Journal for 10 minutes about any worries, then list one small step you can take for one of them.").
