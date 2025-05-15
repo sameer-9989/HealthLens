@@ -53,19 +53,12 @@ export const mainNavItems: NavItem[] = [
     description: 'AI-suggested yoga types and example video routines for stress.',
     color: "bg-orange-100 dark:bg-orange-900"
   },
-  {
-    title: 'Digital Detox Tool',
-    href: '/digital-detox',
-    icon: PowerOff,
-    description: 'Guidance and tools for managing screen time and digital wellness.',
-    color: "bg-purple-100 dark:bg-purple-900"
-  },
   // {
-  //   title: 'Cognitive Tracker',
-  //   href: '/cognitive-tracker',
-  //   icon: Brain,
-  //   description: 'Daily prompts to assess cognitive functions and emotional wellness.',
-  //   color: "bg-lime-100 dark:bg-lime-900"
+  //   title: 'Digital Detox Tool',
+  //   href: '/digital-detox',
+  //   icon: PowerOff,
+  //   description: 'Guidance and tools for managing screen time and digital wellness.',
+  //   color: "bg-purple-100 dark:bg-purple-900"
   // },
   {
     title: 'Health Myth Buster',
@@ -98,6 +91,7 @@ const removedFeaturePlaceholders: NavItem[] = [
     { title: 'Body Scan Visualizer', href: '/body-scan-visualizer', icon: Users, description: "Removed." },
     { title: 'Habit Conflict Detector', href: '/habit-conflict-detector', icon: GitCompareArrows, description: "Removed." },
     { title: 'Cognitive Tracker', href: '/cognitive-tracker', icon: Brain, description: "Removed." },
+    { title: 'Digital Detox Tool', href: '/digital-detox', icon: PowerOff, description: "Removed." },
 ];
 
 

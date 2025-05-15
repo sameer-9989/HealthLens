@@ -15,7 +15,7 @@ import '@/ai/flows/ai-health-myth-buster.ts';
 
 
 // Other Existing/Future AI Features
-import '@/ai/flows/digital-detox-guidance.ts'; // For Digital Detox Tool
+// import '@/ai/flows/digital-detox-guidance.ts'; // Removed
 
 // Placeholder/Future AI Features (flows might still exist if pages are placeholders)
 import '@/ai/flows/ai-mood-language-monitor.ts'; // If Mental Health Check-in uses parts of it
