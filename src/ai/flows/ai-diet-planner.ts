@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI agent that generates personalized diet plans.
@@ -53,7 +54,7 @@ const MealSchema = z.object({
   ingredients: z.array(IngredientSchema).min(1).describe("List of ingredients with quantities and units."),
   preparationSteps: z.array(z.string()).min(1).describe("Step-by-step preparation instructions."),
   nutritionalInfo: NutritionalInfoSchema,
-  recipeImageHint: z.string().optional().max(30).describe("A 2-4 word hint for a relevant placeholder image, e.g., 'oatmeal berries fruit', 'grilled chicken salad bowl', 'salmon asparagus plate'. This will be used for data-ai-hint."),
+  recipeImageHint: z.string().max(30).optional().describe("A 2-4 word hint for a relevant placeholder image, e.g., 'oatmeal berries fruit', 'grilled chicken salad bowl', 'salmon asparagus plate'. This will be used for data-ai-hint."),
   healthBenefits: z.string().optional().describe("Briefly list 1-2 key health benefits of this meal in relation to the user's goals if apparent.")
 });
 
@@ -182,3 +183,4 @@ const generateDietPlanFlow = ai.defineFlow(
 );
 
     
+
