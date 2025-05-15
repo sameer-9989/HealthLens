@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
         port: '',
-        pathname: '/project-anvil-bucket/studio-assets/**',
+        pathname: '/**', // Changed from '/project-anvil-bucket/studio-assets/**'
       }
     ],
   },
