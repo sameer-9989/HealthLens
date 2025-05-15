@@ -14,7 +14,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { generateDailyWellnessTip, GenerateDailyWellnessTipInput, GenerateDailyWellnessTipOutput } from '@/ai/flows/daily-wellness-tip-generator';
-import { useToast } from '@/hooks/use-toast'; // For emergency alerts
+import { useToast } from '@/hooks/use-toast';
 
 const symptomLogSchema = z.object({
   description: z.string().min(3, "Symptom description is too short."),
@@ -50,7 +50,6 @@ const languages = [
     { value: "es", label: "Español (Spanish)" },
     { value: "hi", label: "हिन्दी (Hindi)" },
     { value: "kn", label: "ಕನ್ನಡ (Kannada)" },
-    // Add more languages as supported by AI
 ];
 
 export default function HealthTrackerPage() {
@@ -65,12 +64,12 @@ export default function HealthTrackerPage() {
     defaultValues: { severity: "Mild" }
   });
 
-  const { control: tipControl, handleSubmit: handleTipSubmit, formState: { errors: tipErrors } } = useForm<WellnessTipFormData>({
+  const { control: tipControl, handleSubmit: handleTipSubmit, formState: { errors: tipErrors }, getValues: getTipValues } = useForm<WellnessTipFormData>({
     resolver: zodResolver(wellnessTipSchema),
     defaultValues: { userFocus: "general wellness", language: "en"}
   });
 
-  const criticalKeywords = ["chest pain", "difficulty breathing", "can't breathe", "severe bleeding", "loss of consciousness", "stroke symptoms", "sudden numbness", "severe dizziness", "suicidal", "want to die", "self harm"];
+  const criticalKeywords = ["chest pain", "difficulty breathing", "can't breathe", "severe bleeding", "loss of consciousness", "stroke symptoms", "sudden numbness", "severe dizziness", "suicidal", "want to die", "self harm", "heart attack", "unable to speak", "severe pain", "uncontrollable bleeding", "blue lips", "seizure"];
 
   const onSymptomLogSubmit: SubmitHandler<SymptomLogFormData> = (data) => {
     const now = new Date();
@@ -83,14 +82,13 @@ export default function HealthTrackerPage() {
     setSymptomLogs(prev => [newLog, ...prev]);
     resetSymptomForm();
 
-    // Client-side critical symptom check
     const descriptionLower = data.description.toLowerCase();
     if (criticalKeywords.some(keyword => descriptionLower.includes(keyword))) {
       toast({
         variant: "destructive",
         title: "Critical Symptom Warning!",
-        description: "Your logged symptom description suggests a serious condition. Please seek immediate medical attention or contact your local emergency services (e.g., 911, 112). This app does not provide medical diagnosis or emergency services.",
-        duration: 10000, // Longer duration for important warnings
+        description: "Your logged symptom suggests a serious condition. Please seek immediate medical attention or contact your local emergency services (e.g., 911, 112, or your regional number). Provide clear information to the dispatcher. This app does not provide medical diagnosis or emergency services.",
+        duration: 15000, 
       });
     }
   };
@@ -101,8 +99,7 @@ export default function HealthTrackerPage() {
     setWellnessTipResult(null);
     try {
       const input: GenerateDailyWellnessTipInput = { userFocus: data.userFocus, language: data.language };
-      // In a real app, age and healthGoals might come from a user profile
-      // For demonstration: input.age = 30; input.healthGoals = ["reduce stress"];
+      // In a real app, age and healthGoals might come from a user profile. The AI flow supports them.
       const result = await generateDailyWellnessTip(input);
       setWellnessTipResult(result);
     } catch (e) {
@@ -112,9 +109,10 @@ export default function HealthTrackerPage() {
     setIsLoadingTip(false);
   };
   
-  // Fetch initial wellness tip on component mount
   useEffect(() => {
-    handleTipSubmit({ userFocus: "general wellness", language: "en" })();
+    // Fetch initial wellness tip on component mount using default form values
+    const initialTipValues = getTipValues();
+    onWellnessTipSubmit(initialTipValues);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -123,14 +121,14 @@ export default function HealthTrackerPage() {
     if (symptomLogs.length === 0) return "No symptoms logged in this session yet.";
     const descriptionCounts: Record<string, number> = {};
     symptomLogs.forEach(log => {
-      descriptionCounts[log.description.trim()] = (descriptionCounts[log.description.trim()] || 0) + 1;
+      const key = log.description.trim().toLowerCase();
+      descriptionCounts[key] = (descriptionCounts[key] || 0) + 1;
     });
     const mostFrequentDescription = Object.entries(descriptionCounts).sort((a, b) => b[1] - a[1])[0];
-    let trendText = `Logged ${symptomLogs.length} symptom(s) this session. `;
+    let trendText = `Logged ${symptomLogs.length} symptom entry/entries this session. `;
     if (mostFrequentDescription) {
       trendText += `The most frequent symptom description is: "${mostFrequentDescription[0]}" (logged ${mostFrequentDescription[1]} time(s)). `;
     }
-    // More complex trend analysis (e.g., severity changes over time) would require more data and logic.
     return trendText;
   };
 
@@ -143,16 +141,15 @@ export default function HealthTrackerPage() {
             <ActivityIcon className="mr-2 h-7 w-7 text-primary" /> Health Tracker
           </CardTitle>
           <CardDescription>
-            Log your symptoms, get daily wellness tips, and monitor your health journey.
+            Log your symptoms (session-based), get daily wellness tips, and monitor your health journey.
           </CardDescription>
         </CardHeader>
       </Card>
 
-      {/* Daily Wellness Tip Section */}
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle className="text-xl flex items-center"><Lightbulb className="mr-2 h-6 w-6 text-primary" /> Daily Wellness Tip</CardTitle>
-          <CardDescription>Get a personalized wellness tip from our AI coach. For more detailed personalization, future updates will allow linking to your user profile for age and health goals.</CardDescription>
+          <CardDescription>Get a wellness tip from our AI coach. The AI can personalize tips further if age and health goals are provided (future user profile integration).</CardDescription>
         </CardHeader>
         <form onSubmit={handleTipSubmit(onWellnessTipSubmit)}>
             <CardContent className="space-y-4">
@@ -222,11 +219,10 @@ export default function HealthTrackerPage() {
         )}
       </Card>
 
-      {/* Symptom Logging Section */}
       <Card className="shadow-md">
         <CardHeader>
-          <CardTitle className="text-xl flex items-center"><NotebookText className="mr-2 h-6 w-6 text-primary" />Log New Symptom (Current Session)</CardTitle>
-          <CardDescription>Enter your symptoms below. Data is stored for this session only.</CardDescription>
+          <CardTitle className="text-xl flex items-center"><NotebookText className="mr-2 h-6 w-6 text-primary" />Log New Symptom (Current Session Data)</CardTitle>
+          <CardDescription>Enter your symptoms below. Data is stored for this browser session only and will be cleared when you refresh or close the page.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSymptomSubmit(onSymptomLogSubmit)}>
           <CardContent className="space-y-4">
@@ -261,26 +257,25 @@ export default function HealthTrackerPage() {
             </div>
              <Alert variant="destructive" className="bg-destructive/10 border-destructive/30">
               <ShieldAlert className="h-4 w-4 !text-destructive" />
-              <AlertTitle className="text-destructive">Emergency Warning</AlertTitle>
+              <AlertTitle className="text-destructive">Emergency Warning & Disclaimer</AlertTitle>
               <AlertDescription className="text-destructive/80">
-                If you are experiencing severe symptoms like chest pain, difficulty breathing, or other critical issues, please seek immediate medical attention from a healthcare professional or call your local emergency services. This app does not provide medical diagnosis or emergency services.
+                If you are experiencing severe symptoms like chest pain, difficulty breathing, or other critical issues, please seek immediate medical attention from a healthcare professional or call your local emergency services (e.g., 911, 112). This app does not provide medical diagnosis or emergency services. Symptom logging is for informational purposes only.
               </AlertDescription>
             </Alert>
           </CardContent>
           <CardFooter>
-            <Button type="submit">Log Symptom</Button>
+            <Button type="submit">Log Symptom to Current Session</Button>
           </CardFooter>
         </form>
       </Card>
 
-      {/* Symptom Log Display Section */}
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle className="text-xl flex items-center"><CalendarDays className="mr-2 h-6 w-6 text-primary" />Symptom Log (Current Session)</CardTitle>
         </CardHeader>
         <CardContent>
           {symptomLogs.length === 0 ? (
-            <p className="text-muted-foreground">No symptoms logged in this session yet.</p>
+            <p className="text-muted-foreground">No symptoms logged in this browser session yet.</p>
           ) : (
             <ul className="space-y-3">
               {symptomLogs.map(log => (
@@ -295,26 +290,25 @@ export default function HealthTrackerPage() {
         </CardContent>
       </Card>
 
-      {/* Symptom Trends Section */}
       <Card className="shadow-md">
         <CardHeader>
           <CardTitle className="text-xl flex items-center"><TrendingUp className="mr-2 h-6 w-6 text-primary" />Symptom Summary (Current Session)</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">{getSymptomTrends()}</p>
-          <p className="text-xs text-muted-foreground mt-2">Note: Advanced trend visualization over time requires persistent data storage, which is a planned future enhancement.</p>
+          <p className="text-xs text-muted-foreground mt-2">Note: More advanced trend visualization (like charts over weeks/months) requires persistent data storage, which is a planned future enhancement needing backend integration.</p>
         </CardContent>
       </Card>
 
-      {/* Important Notes and Future Enhancements */}
       <Card className="shadow-md mt-8 bg-secondary/50">
         <CardHeader>
             <CardTitle className="text-lg flex items-center"><HelpCircle className="mr-2 h-5 w-5 text-primary"/>Important Notes & Future Enhancements</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
-            <p><strong>Data Persistence:</strong> Symptom logs entered on this page are stored for your current session only and will be cleared when you close or refresh this page. Persistent symptom history, allowing you to view logs across multiple sessions, is a feature planned for future updates and requires backend database integration.</p>
-            <p><strong>Trend Analysis & Visualizations:</strong> The current "Symptom Summary" provides a very basic textual overview of symptoms logged in this session. Advanced trend analysis, visualizations (like charts and graphs of symptom frequency/severity over weeks or months), and progress tracking are planned for future versions that include persistent data storage.</p>
-            <p><strong>Offline Functionality:</strong> While you can log symptoms during your current browser session if the page is already loaded, full offline data storage (beyond the current session) and automatic cloud synchronization are advanced features that will be explored in future updates.</p>
+            <p><strong>Data Persistence & Symptom History:</strong> Symptom logs entered on this page are stored locally in your browser for your current session only. They will be cleared when you close or refresh this page. Viewing past symptom logs from previous sessions and advanced trend analysis (like charts) are features planned for future updates and require backend database integration for persistent storage.</p>
+            <p><strong>Health Visualizations:</strong> Graphs for common symptoms, trends over weeks/months, and symptom reduction progress are planned as future enhancements. These features depend on the persistent data storage mentioned above.</p>
+            <p><strong>Offline Functionality & Cloud Sync:</strong> While you can log symptoms during your current browser session if the page is already loaded, full offline data storage (beyond the current session using browser local storage) and automatic cloud synchronization are advanced features that will be explored in future updates requiring backend services.</p>
+            <p><strong>Daily Rotating Tips:</strong> Automatic daily rotation of wellness tips also requires a mechanism (likely backend) to track "today's tip" to avoid repetition and ensure freshness. The current "Get New Tip" button allows manual refresh.</p>
             <p><strong>Emergency Guidance:</strong> The critical symptom warning is a client-side aid. Always prioritize professional medical advice for any urgent health concerns. The main AI Symptom Checker and Virtual Nursing Assistant also have AI-driven checks for critical inputs.</p>
         </CardContent>
       </Card>
