@@ -9,7 +9,13 @@ import '@/ai/flows/self-care-plan-generator.ts';
 import '@/ai/flows/cognitive-health-tracker.ts';
 import '@/ai/flows/symptom-playback-timeline.ts'; // For analyzing user-inputted entries
 
-// New AI Features
+// New AI Features from this request
+import '@/ai/flows/ai-health-myth-buster.ts';
+import '@/ai/flows/ai-habit-conflict-detector.ts';
+import '@/ai/flows/ai-body-scan-visualizer.ts';
+
+
+// Other Existing/Future AI Features
 import '@/ai/flows/digital-detox-guidance.ts'; // For Digital Detox Tool
 // import '@/ai/flows/generate-image-flow.ts'; // Removed
 
@@ -18,7 +24,7 @@ import '@/ai/flows/ai-mood-language-monitor.ts'; // If Mental Health Check-in us
 import '@/ai/flows/behavioral-health-nudging.ts'; // If any nudging concepts are integrated elsewhere
 import '@/ai/flows/symptom-journal-synthesizer.ts';
 import '@/ai/flows/mental-health-check-in-companion.ts';
-import '@/ai/flows/conversational-health-coach.ts'; // This was a previous version, VA now handles more
+import '@/ai/flows/conversational-health-coach.ts'; 
 import '@/ai/flows/health-question-auto-formulator.ts';
 import '@/ai/flows/secure-emergency-info-builder.ts';
 
