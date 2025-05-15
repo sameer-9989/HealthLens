@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Settings,
   Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
   PowerOff, YoutubeIcon, Zap as StressIcon,
-  Lightbulb, GitCompareArrows, Wind, Users
+  Lightbulb, GitCompareArrows, Wind, Users, Info
 } from 'lucide-react';
 
 export interface NavItem {
@@ -17,30 +17,30 @@ export interface NavItem {
 }
 
 export const mainNavItems: NavItem[] = [
-  { 
-    title: 'Dashboard', 
-    href: '/', 
+  {
+    title: 'Dashboard',
+    href: '/',
     icon: LayoutDashboard,
     description: 'Overview of your health and quick actions.',
     color: "bg-sky-100 dark:bg-sky-900"
   },
-  { 
-    title: 'AI Symptom Checker', 
-    href: '/symptom-checker', 
+  {
+    title: 'AI Symptom Checker',
+    href: '/symptom-checker',
     icon: Stethoscope,
     description: 'Get diagnostic suggestions for your symptoms. Includes multilingual & cultural sensitivity options.',
     color: "bg-teal-100 dark:bg-teal-900"
   },
-  { 
-    title: 'Virtual Assistant', 
-    href: '/virtual-assistant', 
+  {
+    title: 'Virtual Assistant',
+    href: '/virtual-assistant',
     icon: MessageCircleHeart,
     description: 'Chat for med info, term explanations, mindfulness, & health guidance.',
     color: "bg-blue-100 dark:bg-blue-900"
   },
-  { 
-    title: 'Self-Care Plans', 
-    href: '/self-care-plans', 
+  {
+    title: 'Self-Care Plans',
+    href: '/self-care-plans',
     icon: BookHeart,
     description: 'AI-generated personalized plans for various conditions & goals.',
     color: "bg-green-100 dark:bg-green-900"
@@ -48,7 +48,7 @@ export const mainNavItems: NavItem[] = [
   {
     title: 'Stress Relief Yoga',
     href: '/stress-relief-yoga',
-    icon: StressIcon, 
+    icon: StressIcon,
     description: 'AI-suggested yoga types and example video routines for stress.',
     color: "bg-orange-100 dark:bg-orange-900"
   },
@@ -59,9 +59,9 @@ export const mainNavItems: NavItem[] = [
     description: 'Guidance and tools for managing screen time and digital wellness.',
     color: "bg-purple-100 dark:bg-purple-900"
   },
-  { 
-    title: 'Cognitive Tracker', 
-    href: '/cognitive-tracker', 
+  {
+    title: 'Cognitive Tracker',
+    href: '/cognitive-tracker',
     icon: Brain,
     description: 'Daily prompts to assess cognitive functions and emotional wellness.',
     color: "bg-lime-100 dark:bg-lime-900"
@@ -83,30 +83,23 @@ export const mainNavItems: NavItem[] = [
   {
     title: 'Focus & Mental Reset',
     href: '/focus-mental-reset',
-    icon: Wind, 
+    icon: Wind,
     description: 'Access guided breathing, nature sounds, and meditations.',
     color: "bg-cyan-100 dark:bg-cyan-900"
   },
   {
     title: 'Body Scan Visualizer',
     href: '/body-scan-visualizer',
-    icon: Users, 
+    icon: Users,
     description: 'Learn about body parts, common issues, and care.',
     color: "bg-pink-100 dark:bg-pink-900"
   },
-  { 
-    title: 'Mental Health Check-In', 
-    href: '/mental-health-checkin', 
+  {
+    title: 'Mental Health Check-In',
+    href: '/mental-health-checkin',
     icon: UserCheck,
     description: 'Emotionally intelligent mental health support (Placeholder).',
     color: "bg-rose-100 dark:bg-rose-900"
-  },
-  { 
-    title: 'Emergency Info', 
-    href: '/emergency-info', 
-    icon: ShieldAlert,
-    description: 'Create a downloadable emergency information sheet (Placeholder).',
-    color: "bg-amber-100 dark:bg-amber-900"
   },
 ];
 

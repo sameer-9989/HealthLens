@@ -22,9 +22,9 @@ import '@/ai/flows/ai-mood-language-monitor.ts'; // If Mental Health Check-in us
 import '@/ai/flows/behavioral-health-nudging.ts'; // If any nudging concepts are integrated elsewhere
 // import '@/ai/flows/symptom-journal-synthesizer.ts'; // Removed
 import '@/ai/flows/mental-health-check-in-companion.ts';
-import '@/ai/flows/conversational-health-coach.ts'; 
+import '@/ai/flows/conversational-health-coach.ts';
 // import '@/ai/flows/health-question-auto-formulator.ts'; // Removed
-import '@/ai/flows/secure-emergency-info-builder.ts';
+// import '@/ai/flows/secure-emergency-info-builder.ts'; // Removed
 
 
 // Ensure all active flows are imported.
@@ -36,3 +36,5 @@ import '@/ai/flows/secure-emergency-info-builder.ts';
 // import '@/ai/flows/multilingual-health-literacy-guide.ts'; // Merged
 // import '@/ai/flows/generate-image-flow.ts'; // Removed
 // import '@/ai/flows/symptom-playback-timeline.ts'; // Removed
+// import '@/ai/flows/symptom-journal-synthesizer.ts'; // Removed
+// import '@/ai/flows/health-question-auto-formulator.ts'; // Removed
