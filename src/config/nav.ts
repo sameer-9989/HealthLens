@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Settings,
   FileText, Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
   PowerOff, Youtube as YoutubeIcon, Zap as StressIcon, Image as ImageIcon,
-  Lightbulb, GitCompareArrows, Wind, AnatomicalHeart, Users // Added new icons
+  Lightbulb, GitCompareArrows, Wind, AnatomicalHeart, Users
 } from 'lucide-react';
 
 export interface NavItem {
@@ -101,14 +101,14 @@ export const mainNavItems: NavItem[] = [
     description: 'Learn about body parts, common issues, and care.',
     color: "bg-pink-100 dark:bg-pink-900"
   },
-  { 
-    title: 'AI Image Gallery', 
-    href: '/ai-image-gallery', 
-    icon: ImageIcon,
-    description: 'View and manage AI-generated images (Feature Removed).',
-    color: "bg-gray-100 dark:bg-gray-700",
-    disabled: true,
-  },
+  // { 
+  //   title: 'AI Image Gallery', 
+  //   href: '/ai-image-gallery', 
+  //   icon: ImageIcon,
+  //   description: 'View and manage AI-generated images (Feature Removed).',
+  //   color: "bg-gray-100 dark:bg-gray-700",
+  //   disabled: true,
+  // },
   { 
     title: 'Journal Synthesizer', 
     href: '/journal-synthesizer', 
@@ -142,3 +142,4 @@ export const mainNavItems: NavItem[] = [
 export const secondaryNavItems: NavItem[] = [
   { title: 'Settings', href: '/settings', icon: Settings },
 ];
+
