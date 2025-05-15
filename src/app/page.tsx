@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
-import { ArrowRight, ListChecks, Activity, Youtube } from "lucide-react";
+import { ArrowRight, ListChecks, Activity, Youtube as YoutubeIcon } from "lucide-react"; // Corrected Youtube to YoutubeIcon if that was the alias
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -39,13 +39,14 @@ export default function DashboardPage() {
                 </Link>
               </Button>
             </div>
-            <div className="hidden md:block">
+            <div className="mt-6 md:mt-0 flex justify-center md:justify-end">
               <Image 
-                src="/images/health-lens-dashboard-hero.png" 
-                alt="HealthLens platform guide to better health with assistant, symptom checker, and self-care plans" 
-                width={600} 
-                height={400} 
+                src="https://storage.googleapis.com/project-anvil-bucket/studio-assets%2Fhealth-lens-dashboard-hero.png_1715098829503" 
+                alt="Health Lens app - Your guide to better health, featuring an AI assistant, symptom checker, self-care plans, and more, with a friendly doctor illustration." 
+                width={480} 
+                height={480} 
                 className="rounded-lg shadow-md object-cover"
+                priority 
               />
             </div>
           </div>
@@ -114,7 +115,7 @@ export default function DashboardPage() {
               <Link href={stressReliefYogaItem.href} className="block hover:no-underline">
                    <Card className="hover:bg-accent/50 transition-colors h-full">
                       <CardHeader className="flex flex-row items-center gap-4">
-                          <Youtube className="h-8 w-8 text-primary" /> {/* Assuming Youtube icon for yoga videos */}
+                          <YoutubeIcon className="h-8 w-8 text-primary" />
                           <div>
                               <CardTitle>{stressReliefYogaItem.title}</CardTitle>
                               <CardDescription>{stressReliefYogaItem.description || "Find yoga routines for stress."}</CardDescription>
