@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
-import { ArrowRight, ListChecks, Activity, Youtube as YoutubeIcon } from "lucide-react"; // Corrected Youtube to YoutubeIcon if that was the alias
+import { ArrowRight, ListChecks, Activity, YoutubeIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -17,16 +17,27 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      <div className="w-full max-w-[600px] mx-auto p-4">
+        <Image
+          src="/images/health_lens_hero.png"
+          alt="Health Lens App Hero Image"
+          width={600} 
+          height={600} 
+          className="rounded-lg shadow-md object-contain w-full h-auto"
+          priority 
+        />
+      </div>
+
       <Card className="shadow-lg">
-        <CardHeader className="pb-4">
+        <CardHeader className="pb-4 text-center">
           <CardTitle className="text-3xl font-bold">Welcome to HealthLens!</CardTitle>
           <CardDescription className="text-lg text-muted-foreground">
             Your personal AI-powered health companion. Explore tools to manage your well-being.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-2 gap-6 items-center">
-            <div>
+          <div className="grid md:grid-cols-1 gap-6 items-center"> {/* Adjusted to single column as image is now above */}
+            <div className="text-center md:text-left">
               <p className="mb-4">
                 HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, create self-care plans, manage stress, and interact with a virtual health assistant.
               </p>
@@ -39,16 +50,7 @@ export default function DashboardPage() {
                 </Link>
               </Button>
             </div>
-            <div className="mt-6 md:mt-0 flex justify-center md:justify-end">
-              <Image 
-                src="https://storage.googleapis.com/project-anvil-bucket/studio-assets%2Fhealth-lens-dashboard-hero.png_1715098829503" 
-                alt="Health Lens app - Your guide to better health, featuring an AI assistant, symptom checker, self-care plans, and more, with a friendly doctor illustration." 
-                width={480} 
-                height={480} 
-                className="rounded-lg shadow-md object-cover"
-                priority 
-              />
-            </div>
+            {/* Previous image div removed */}
           </div>
         </CardContent>
       </Card>
