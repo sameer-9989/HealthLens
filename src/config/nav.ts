@@ -60,13 +60,13 @@ export const mainNavItems: NavItem[] = [
     description: 'Guidance and tools for managing screen time and digital wellness.',
     color: "bg-purple-100 dark:bg-purple-900"
   },
-  {
-    title: 'Cognitive Tracker',
-    href: '/cognitive-tracker',
-    icon: Brain,
-    description: 'Daily prompts to assess cognitive functions and emotional wellness.',
-    color: "bg-lime-100 dark:bg-lime-900"
-  },
+  // {
+  //   title: 'Cognitive Tracker',
+  //   href: '/cognitive-tracker',
+  //   icon: Brain,
+  //   description: 'Daily prompts to assess cognitive functions and emotional wellness.',
+  //   color: "bg-lime-100 dark:bg-lime-900"
+  // },
   {
     title: 'Health Myth Buster',
     href: '/health-myth-buster',
@@ -74,13 +74,6 @@ export const mainNavItems: NavItem[] = [
     description: 'AI-powered debunking of common health myths.',
     color: "bg-yellow-100 dark:bg-yellow-900"
   },
-  // {
-  //   title: 'Habit Conflict Detector',
-  //   href: '/habit-conflict-detector',
-  //   icon: GitCompareArrows,
-  //   description: 'Analyze potential conflicts in your health routines.',
-  //   color: "bg-indigo-100 dark:bg-indigo-900"
-  // },
   {
     title: 'Focus & Mental Reset',
     href: '/focus-mental-reset',
@@ -104,6 +97,7 @@ const removedFeaturePlaceholders: NavItem[] = [
     { title: 'Mental Health Check-In', href: '/mental-health-checkin', icon: UserCheck, description: "Merged into Virtual Assistant." },
     { title: 'Body Scan Visualizer', href: '/body-scan-visualizer', icon: Users, description: "Removed." },
     { title: 'Habit Conflict Detector', href: '/habit-conflict-detector', icon: GitCompareArrows, description: "Removed." },
+    { title: 'Cognitive Tracker', href: '/cognitive-tracker', icon: Brain, description: "Removed." },
 ];
 
 
