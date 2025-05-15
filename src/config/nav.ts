@@ -2,9 +2,9 @@
 import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard, Stethoscope, MessageCircleHeart, BookHeart, Settings,
-  FileText, Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
-  PowerOff, YoutubeIcon, Zap as StressIcon, Image as ImageIcon,
-  Lightbulb, GitCompareArrows, Wind, AnatomicalHeart, Users
+  Activity, UserCheck, BotMessageSquare, HelpCircle, ShieldAlert, Brain, Palette,
+  PowerOff, YoutubeIcon, Zap as StressIcon,
+  Lightbulb, GitCompareArrows, Wind, Users
 } from 'lucide-react';
 
 export interface NavItem {
@@ -59,13 +59,6 @@ export const mainNavItems: NavItem[] = [
     description: 'Guidance and tools for managing screen time and digital wellness.',
     color: "bg-purple-100 dark:bg-purple-900"
   },
-  // { 
-  //   title: 'Symptom Timeline', 
-  //   href: '/symptom-timeline', 
-  //   icon: Activity,
-  //   description: 'Manually log and analyze your symptom progression over time.',
-  //   color: "bg-red-100 dark:bg-red-900"
-  // },
   { 
     title: 'Cognitive Tracker', 
     href: '/cognitive-tracker', 
@@ -90,24 +83,24 @@ export const mainNavItems: NavItem[] = [
   {
     title: 'Focus & Mental Reset',
     href: '/focus-mental-reset',
-    icon: Wind, // Using Wind as a general icon for reset/calm
+    icon: Wind, 
     description: 'Access guided breathing, nature sounds, and meditations.',
     color: "bg-cyan-100 dark:bg-cyan-900"
   },
   {
     title: 'Body Scan Visualizer',
     href: '/body-scan-visualizer',
-    icon: Users, // Using Users as a general body icon
+    icon: Users, 
     description: 'Learn about body parts, common issues, and care.',
     color: "bg-pink-100 dark:bg-pink-900"
   },
-  { 
-    title: 'Journal Synthesizer', 
-    href: '/journal-synthesizer', 
-    icon: FileText,
-    description: 'Convert journal entries into medical summaries (Placeholder).',
-    color: "bg-fuchsia-100 dark:bg-fuchsia-900"
-  },
+  // { 
+  //   title: 'Journal Synthesizer', 
+  //   href: '/journal-synthesizer', 
+  //   icon: FileText, // Icon was FileText
+  //   description: 'Convert journal entries into medical summaries (Placeholder).',
+  //   color: "bg-fuchsia-100 dark:bg-fuchsia-900"
+  // },
   { 
     title: 'Mental Health Check-In', 
     href: '/mental-health-checkin', 
