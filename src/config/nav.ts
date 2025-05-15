@@ -74,13 +74,13 @@ export const mainNavItems: NavItem[] = [
     description: 'AI-powered debunking of common health myths.',
     color: "bg-yellow-100 dark:bg-yellow-900"
   },
-  {
-    title: 'Habit Conflict Detector',
-    href: '/habit-conflict-detector',
-    icon: GitCompareArrows,
-    description: 'Analyze potential conflicts in your health routines.',
-    color: "bg-indigo-100 dark:bg-indigo-900"
-  },
+  // {
+  //   title: 'Habit Conflict Detector',
+  //   href: '/habit-conflict-detector',
+  //   icon: GitCompareArrows,
+  //   description: 'Analyze potential conflicts in your health routines.',
+  //   color: "bg-indigo-100 dark:bg-indigo-900"
+  // },
   {
     title: 'Focus & Mental Reset',
     href: '/focus-mental-reset',
@@ -88,13 +88,6 @@ export const mainNavItems: NavItem[] = [
     description: 'Access guided breathing, nature sounds, and meditations.',
     color: "bg-cyan-100 dark:bg-cyan-900"
   },
-  // {
-  //   title: 'Body Scan Visualizer',
-  //   href: '/body-scan-visualizer',
-  //   icon: Users, // Consider AnatomicalHeart if more specific
-  //   description: 'Learn about body parts, common issues, and care.',
-  //   color: "bg-pink-100 dark:bg-pink-900"
-  // },
 ];
 
 // Features that were removed or merged, showing their original icons for reference if needed
@@ -109,7 +102,8 @@ const removedFeaturePlaceholders: NavItem[] = [
     { title: 'Question Formulator', href: '/question-formulator', icon: HelpCircle, description: "Removed."},
     { title: 'Emergency Info', href: '/emergency-info', icon: ShieldAlert, description: "Removed."},
     { title: 'Mental Health Check-In', href: '/mental-health-checkin', icon: UserCheck, description: "Merged into Virtual Assistant." },
-    { title: 'Body Scan Visualizer', href: '/body-scan-visualizer', icon: Users, description: "Removed." }
+    { title: 'Body Scan Visualizer', href: '/body-scan-visualizer', icon: Users, description: "Removed." },
+    { title: 'Habit Conflict Detector', href: '/habit-conflict-detector', icon: GitCompareArrows, description: "Removed." },
 ];
 
 

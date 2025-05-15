@@ -10,7 +10,7 @@ import '@/ai/flows/cognitive-health-tracker.ts';
 
 // New AI Features from this request
 import '@/ai/flows/ai-health-myth-buster.ts';
-import '@/ai/flows/ai-habit-conflict-detector.ts';
+// import '@/ai/flows/ai-habit-conflict-detector.ts'; // Removed
 // import '@/ai/flows/ai-body-scan-visualizer.ts'; // Removed
 
 
