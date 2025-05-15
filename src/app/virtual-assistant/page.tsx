@@ -10,7 +10,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Loader2, Send, User, Bot, AlertTriangleIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-// Label and Textarea are no longer needed if context inputs are removed
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface Message {
@@ -27,11 +26,6 @@ export default function VirtualAssistantPage() {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-
-  // User context state removed as per request
-  // const [userMedications, setUserMedications] = useState<string[]>(['Lisinopril 10mg daily', 'Metformin 500mg twice daily']);
-  // const [userHealthGoals, setUserHealthGoals] = useState<string[]>(['Lower A1c', 'Increase daily steps to 8000']);
-  // const [medicationToCheck, setMedicationToCheck] = useState('');
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -52,6 +46,15 @@ export default function VirtualAssistantPage() {
       sender: 'user',
       timestamp: new Date(),
     };
+    
+    // Prepare conversation history string for the AI
+    // This includes the new user message to provide context for the current AI response
+    const currentMessagesWithUser = [...messages, userMessage];
+    const historyForAI = currentMessagesWithUser
+      .slice(-6) // Limit to last ~3 turns (6 messages) to keep prompt concise
+      .map(msg => `${msg.sender === 'user' ? 'User' : 'Assistant'}: ${msg.text}`)
+      .join('\n');
+
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     
     setIsLoading(true);
@@ -59,10 +62,7 @@ export default function VirtualAssistantPage() {
     try {
       const aiInput: VirtualNursingAssistantInput = {
         message: userMessage.text,
-        // medications, healthGoals, and medicationToCheck are no longer passed from page state
-        // The AI flow should handle cases where these are undefined if it needs them.
-        // For this iteration, we assume the VA can operate based on the message alone,
-        // or that these context points would be fetched/managed differently in a full app.
+        conversationHistory: historyForAI,
       };
       const aiOutput: VirtualNursingAssistantOutput = await virtualNursingAssistant(aiInput);
       const aiMessage: Message = {
@@ -84,13 +84,11 @@ export default function VirtualAssistantPage() {
       };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
     }
-    setInputValue(''); // Clear main input
-    // setMedicationToCheck(''); // No longer needed
+    setInputValue('');
     setIsLoading(false);
   };
   
   useEffect(() => {
-    // Ensure initial greeting is still set
     if (messages.length === 0) {
         setMessages([
         {
@@ -102,11 +100,9 @@ export default function VirtualAssistantPage() {
         ]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
   return (
-    // Removed the outer div flex container and the first Card for "Context & Tools"
-    // The chat card now takes full width and height available.
     <Card className="shadow-lg w-full flex flex-col h-[calc(100vh-8rem)] max-h-[700px] md:max-h-full">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Virtual Nursing Assistant</CardTitle>
@@ -200,3 +196,5 @@ export default function VirtualAssistantPage() {
     </Card>
   );
 }
+
+    
