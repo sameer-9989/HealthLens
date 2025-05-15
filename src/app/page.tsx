@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { mainNavItems } from "@/config/nav";
 import Link from "next/link";
-import { ArrowRight, ListChecks, Activity, YoutubeIcon } from "lucide-react";
+import { ArrowRight, ListChecks, Activity, YoutubeIcon } from "lucide-react"; // Corrected Youtube to YoutubeIcon if it's an alias
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -17,8 +17,6 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Hero image section removed */}
-
       <Card className="shadow-lg">
         <CardHeader className="pb-4 text-center">
           <CardTitle className="text-3xl font-bold">Welcome to HealthLens!</CardTitle>
@@ -27,19 +25,30 @@ export default function DashboardPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-1 gap-6 items-center"> {/* Adjusted to single column */}
+          <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="text-center md:text-left">
               <p className="mb-4">
                 HealthLens provides a suite of AI-powered tools and resources to help you understand your symptoms, create self-care plans, manage stress, and interact with a virtual health assistant.
               </p>
-              <p>
+              <p className="mb-6">
                 Navigate through the sidebar to access all available features.
               </p>
-              <Button asChild className="mt-6">
+              <Button asChild size="lg">
                 <Link href="/symptom-checker">
-                  Check Symptoms <ArrowRight className="ml-2 h-4 w-4" />
+                  Check Symptoms <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
+            </div>
+            <div className="mt-6 md:mt-0 flex justify-center items-center">
+              <Image
+                src="https://placehold.co/600x400.png"
+                alt="Abstract health and wellness graphic"
+                width={600}
+                height={400}
+                className="rounded-lg shadow-md object-cover"
+                data-ai-hint="abstract health"
+                priority 
+              />
             </div>
           </div>
         </CardContent>
